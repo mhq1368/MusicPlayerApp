@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
@@ -71,5 +73,37 @@ class PlayAudioController extends GetxController {
     } catch (e) {
       debugPrint("Error in playAudio: $e");
     }
+  }
+
+// برای پروگرس بار
+  Rx<Duration> progressValue = Duration(seconds: 0).obs;
+  Rx<Duration> bufferedValue = Duration(seconds: 0).obs;
+  Timer? timer;
+  startProgress() {
+    const tick =
+        Duration(seconds: 1); //این کد هر یک ثانیه به پروگرس بار اضافه میکند
+    int duration = player.duration!.inSeconds; // دریافت زمان پروگرس بار
+    if (timer != null) {
+      if (timer!.isActive) {
+        timer!.cancel();
+        timer = null;
+        player.stop();
+      }
+    }
+
+    timer = Timer.periodic(
+      tick,
+      (timer) {
+        duration--;
+        progressValue.value =
+            player.position; // اختصاص مقدار پروگرس بار به متغیر تعریف شده
+        player.bufferedPosition; // اختصاص مقدار پروگرس بار به متغیر تعریف شده
+        if (duration <= 0) {
+          timer.cancel();
+          progressValue.value = Duration(seconds: 0);
+          bufferedValue.value = Duration(seconds: 0);
+        }
+      },
+    );
   }
 }

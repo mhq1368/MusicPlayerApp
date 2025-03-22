@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:music_player_app/Constant/url_const.dart';
+import 'package:music_player_app/Controllers/play_audio_controller.dart';
 import 'package:music_player_app/Models/musics_model.dart';
 import 'package:music_player_app/Services/dio_connection.dart';
 

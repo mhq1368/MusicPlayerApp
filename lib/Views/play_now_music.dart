@@ -9,7 +9,6 @@ import 'package:music_player_app/Controllers/play_audio_controller.dart';
 import 'package:music_player_app/Models/musics_model.dart';
 import 'package:music_player_app/Views/home_screen_views.dart';
 import 'package:music_player_app/Widgets/myloading.dart';
-
 import '../gen/assets.gen.dart';
 
 // ignore: must_be_immutable
@@ -25,7 +24,6 @@ class _PlayNowMusicState extends State<PlayNowMusic> {
   late int singerid;
   late MusicByIdControllerPlayNow musicByIdControllerPlayNow;
   late PlayAudioController playAudioController;
-  // final MusicsListControllerBySinger musicControllerBySingerId = Get.find();
 
   @override
   void initState() {
@@ -270,17 +268,24 @@ class _PlayNowMusicState extends State<PlayNowMusic> {
                 height: 120,
                 child: Column(
                   children: [
-                    ProgressBar(
-                      barHeight: 10,
-                      bufferedBarColor: Color.fromARGB(255, 237, 216, 178),
-                      timeLabelTextStyle:
-                          Theme.of(context).textTheme.labelSmall,
-                      thumbColor: Color(0xffF2E1C1),
-                      progressBarColor: Color.fromARGB(255, 237, 216, 178),
-                      baseBarColor: Color(0xfff5f5f5),
-                      progress: Duration(seconds: 25),
-                      total: Duration(seconds: 120),
-                      buffered: Duration(seconds: 15),
+                    //ProgressBar  برای پخش موزیک
+                    Obx(
+                      () => ProgressBar(
+                        barHeight: 10,
+                        bufferedBarColor: Color.fromARGB(255, 237, 216, 178),
+                        timeLabelTextStyle:
+                            Theme.of(context).textTheme.labelSmall,
+                        thumbColor: Color(0xffF2E1C1),
+                        progressBarColor: Color.fromARGB(255, 237, 216, 178),
+                        baseBarColor: Color(0xfff5f5f5),
+                        progress: playAudioController.progressValue.value,
+                        total: playAudioController.player.duration ??
+                            Duration(seconds: 0),
+                        buffered: playAudioController.bufferedValue.value,
+                        onSeek: (position) {
+                          playAudioController.player.seek(position);
+                        },
+                      ),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -313,6 +318,7 @@ class _PlayNowMusicState extends State<PlayNowMusic> {
                               playAudioController.isplaying.value = true;
                               playAudioController.currentmusic.value =
                                   playAudioController.player.currentIndex!;
+                              playAudioController.startProgress();
                               playAudioController.player.play();
                             } else if (playAudioController.isplaying.value ==
                                 true) {
