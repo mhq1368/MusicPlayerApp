@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:music_player_app/Controllers/music_by_id_controller_play_now.dart';
-import 'package:music_player_app/Controllers/musics_list_controller_by_singer.dart';
 import 'package:music_player_app/Controllers/play_audio_controller.dart';
 import 'package:music_player_app/Models/musics_model.dart';
 import 'package:music_player_app/Views/home_screen_views.dart';
@@ -15,6 +14,8 @@ import '../gen/assets.gen.dart';
 
 // ignore: must_be_immutable
 class PlayNowMusic extends StatefulWidget {
+  const PlayNowMusic({super.key});
+
   @override
   _PlayNowMusicState createState() => _PlayNowMusicState();
 }
