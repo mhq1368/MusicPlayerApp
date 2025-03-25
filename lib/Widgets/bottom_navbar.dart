@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:music_player_app/Views/home_screen_views.dart';
 
 class BottomNavbar extends StatelessWidget {
   const BottomNavbar({
@@ -27,7 +29,7 @@ class BottomNavbar extends StatelessWidget {
           children: [
             IconButton(
                 onPressed: () {
-                  // Get.off(() => HomePage());
+                  Get.offAll(() => HomePage());
                 },
                 icon: Icon(
                   Icons.home,
