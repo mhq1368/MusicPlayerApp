@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:music_player_app/Views/all_music_list_views.dart';
 import 'package:music_player_app/Views/home_screen_views.dart';
 
 class BottomNavbar extends StatelessWidget {
@@ -37,7 +38,7 @@ class BottomNavbar extends StatelessWidget {
                 )),
             IconButton(
                 onPressed: () {
-                  // Get.off(() => AllMusicsList());
+                  Get.offAll(() => AllMusicsListPage());
                 },
                 icon: Icon(
                   CupertinoIcons.music_note_list,
