@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:music_player_app/Constant/url_const.dart';
 import 'package:music_player_app/Models/musics_model.dart';

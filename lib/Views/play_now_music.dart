@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:music_player_app/Controllers/play_audio_controller.dart';
 import 'package:music_player_app/Models/musics_model.dart';
 import 'package:music_player_app/Views/home_screen_views.dart';
@@ -100,8 +101,9 @@ class _PlayNowMusicState extends State<PlayNowMusic> {
                                       .toString(),
                                   placeholder: (context, url) =>
                                       Center(child: mainLoading(size.height)),
-                                  errorWidget: (context, url, error) =>
-                                      Icon(Icons.error),
+                                  errorWidget: (context, url, error) => Center(
+                                    child: mainLoading(size.height / 3),
+                                  ),
                                 )
                               : CachedNetworkImage(
                                   width: size.width / 1.2,
@@ -111,8 +113,8 @@ class _PlayNowMusicState extends State<PlayNowMusic> {
                                   imageUrl: "",
                                   placeholder: (context, url) =>
                                       Center(child: mainLoading(size.height)),
-                                  errorWidget: (context, url, error) =>
-                                      Icon(Icons.error),
+                                  errorWidget: (context, url, error) => Center(
+                                      child: mainLoading(size.height / 3)),
                                 ),
                         ),
                       ),
@@ -199,58 +201,76 @@ class _PlayNowMusicState extends State<PlayNowMusic> {
                                     child: Padding(
                                       padding: const EdgeInsets.fromLTRB(
                                           15, 0, 15, 0),
-                                      child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Text(
-                                                playAudioController
-                                                    .audiolist[index]
-                                                    .musicName!,
+                                      child: Obx(
+                                        () => Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              Text(
+                                                  playAudioController
+                                                      .audiolist[index]
+                                                      .musicName!,
+                                                  style: playAudioController
+                                                              .currentmusic ==
+                                                          index
+                                                      ? Theme.of(context)
+                                                          .textTheme
+                                                          .displaySmall
+                                                      : Theme.of(context)
+                                                          .textTheme
+                                                          .displayLarge),
+                                              Expanded(
+                                                child: SizedBox(
+                                                  width: 20,
+                                                ),
+                                              ),
+                                              Text(
+                                                  playAudioController
+                                                      .audiolist[index]
+                                                      .musictime!,
+                                                  style: playAudioController
+                                                              .currentmusic ==
+                                                          index
+                                                      ? Theme.of(context)
+                                                          .textTheme
+                                                          .displaySmall
+                                                      : Theme.of(context)
+                                                          .textTheme
+                                                          .displayLarge),
+                                              IconButton(
+                                                onPressed: () {
+                                                  playAudioController
+                                                      .isplaying.value = false;
+                                                  playAudioController.player
+                                                      .stop();
+                                                  Get.offAll(
+                                                      () => PlayNowMusic(),
+                                                      arguments: {
+                                                        'music':
+                                                            playAudioController
+                                                                    .audiolist[
+                                                                index],
+                                                        'singerid':
+                                                            musicModel.singerId
+                                                      });
+                                                },
+                                                icon: Icon(CupertinoIcons
+                                                    .play_circle_fill),
                                                 style: playAudioController
                                                             .currentmusic ==
                                                         index
-                                                    ? Theme.of(context)
-                                                        .textTheme
-                                                        .displaySmall
-                                                    : Theme.of(context)
-                                                        .textTheme
-                                                        .displayLarge),
-                                            Expanded(
-                                              child: SizedBox(
-                                                width: 20,
-                                              ),
-                                            ),
-                                            Text(
-                                                playAudioController
-                                                    .audiolist[index]
-                                                    .musictime!,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .displaySmall),
-                                            IconButton(
-                                              onPressed: () {
-                                                playAudioController
-                                                    .isplaying.value = false;
-                                                playAudioController.player
-                                                    .stop();
-                                                Get.offAll(() => PlayNowMusic(),
-                                                    arguments: {
-                                                      'music':
-                                                          playAudioController
-                                                              .audiolist[index],
-                                                      'singerid':
-                                                          musicModel.singerId
-                                                    });
-                                              },
-                                              icon: Icon(CupertinoIcons
-                                                  .play_circle_fill),
-                                              style: ButtonStyle(
-                                                  iconColor:
-                                                      WidgetStatePropertyAll(
-                                                          Colors.white)),
-                                            )
-                                          ]),
+                                                    ? ButtonStyle(
+                                                        iconColor:
+                                                            WidgetStatePropertyAll(
+                                                                Colors.white))
+                                                    : ButtonStyle(
+                                                        iconColor:
+                                                            WidgetStatePropertyAll(
+                                                                Color(
+                                                                    0x90ffffff))),
+                                              )
+                                            ]),
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -325,6 +345,16 @@ class _PlayNowMusicState extends State<PlayNowMusic> {
                           // شروع کردن به پخش موزیک
                           Obx(() => GestureDetector(
                               onTap: () async {
+                                playAudioController.player.processingStateStream
+                                    .listen((state) {
+                                  if (state == ProcessingState.completed) {
+                                    playAudioController.player.seek(
+                                        Duration.zero); // بازگشت به اول آهنگ
+                                    playAudioController.player
+                                        .play(); // دوباره پخش کن
+                                  }
+                                });
+
                                 if (playAudioController.player.playing) {
                                   playAudioController.player.pause();
                                   playAudioController.isplaying.value = false;

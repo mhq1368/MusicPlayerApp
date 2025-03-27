@@ -28,7 +28,7 @@ final ThemeData lightTheme = ThemeData(
       displaySmall: TextStyle(
           color: const Color(0xFFf5f5f5), fontSize: 13, fontFamily: "Peyda-M"),
       displayLarge: TextStyle(
-          color: const Color(0xFF000000), fontSize: 13, fontFamily: "Peyda-M"),
+          color: const Color(0x99ffffff), fontSize: 13, fontFamily: "Peyda-M"),
       labelSmall: TextStyle(
           color: const Color(0xFFf5f5f5), fontSize: 15, fontFamily: "Peyda-R"),
     ),

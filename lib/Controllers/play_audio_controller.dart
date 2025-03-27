@@ -21,6 +21,12 @@ class PlayAudioController extends GetxController {
   void onInit() async {
     super.onInit();
     try {
+      player.processingStateStream.listen((state) {
+        if (state == ProcessingState.completed) {
+          player.seek(Duration.zero); // بازگشت به اول آهنگ
+          player.play(); // دوباره پخش کن
+        }
+      });
       playList =
           ConcatenatingAudioSource(children: [], useLazyPreparation: true);
       player.currentIndexStream.listen((index) {
