@@ -43,9 +43,10 @@ class SingersListHomePage extends StatelessWidget {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(25),
                             child: CachedNetworkImage(
-                              width: size.width / 2,
-                              height: size.height / 4,
+                              width: size.width / 2.5,
+                              height: size.height / 5.5,
                               fit: BoxFit.cover,
+                              alignment: Alignment.center,
                               imageUrl: singersController
                                   .singerlist[index].singerpicurl!,
                               placeholder: (context, url) =>

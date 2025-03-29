@@ -12,10 +12,11 @@ class PlayAudioController extends GetxController {
   RxList<MusicModel> audiolist = RxList();
   RxBool isplaying = false.obs;
   RxBool loading = false.obs;
-  final player = AudioPlayer();
+  var player = AudioPlayer();
   late var playList;
   RxInt currentmusic = (0).obs;
   var response;
+
   @override
   void onInit() async {
     super.onInit();
@@ -44,6 +45,8 @@ class PlayAudioController extends GetxController {
     // try {
     isplaying.value = true;
     loading.value = true;
+    await player.stop();
+    await player.seek(Duration.zero);
     audiolist.clear();
     playList.clear();
     debugPrint(
@@ -74,7 +77,7 @@ class PlayAudioController extends GetxController {
         playList.add(AudioSource.uri(
             Uri.parse(MusicModel.fromJson(elements).musicUrl!)));
       }
-      debugPrint("Current Music Index: ${currentmusic.value}");
+
       loading.value = false;
       isplaying.value = false;
       return true;

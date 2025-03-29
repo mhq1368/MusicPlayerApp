@@ -21,6 +21,7 @@ class PlayNowMusic extends StatefulWidget {
 class _PlayNowMusicState extends State<PlayNowMusic> {
   late MusicModel musicModel;
   late int singerid;
+
   // late MusicByIdControllerPlayNow musicByIdControllerPlayNow;
   late PlayAudioController playAudioController;
   @override
@@ -37,11 +38,11 @@ class _PlayNowMusicState extends State<PlayNowMusic> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("Audio List: ${playAudioController.audiolist}");
-    // playAudioController.currentmusic.value = musicModel.musicId!;
+    debugPrint("Audio List: ${playAudioController.audiolist.toList()}");
+
     debugPrint("Singer ID :$singerid");
     debugPrint("Music ID :${musicModel.musicId}");
-
+    playAudioController.currentmusic.value = musicModel.musicId!;
     var size = MediaQuery.of(context).size;
     return PopScope(
       canPop: false, // جلوگیری از بستن پیش‌فرض صفحه

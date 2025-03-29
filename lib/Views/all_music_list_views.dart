@@ -11,7 +11,7 @@ import 'package:music_player_app/Widgets/bottom_navbar.dart';
 import '../gen/assets.gen.dart';
 
 class AllMusicsListPage extends StatelessWidget {
-  AllMusicsListPage({super.key});
+  const AllMusicsListPage({super.key});
 
   @override
   Widget build(BuildContext context) {
