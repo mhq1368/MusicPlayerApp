@@ -47,7 +47,7 @@ class _PlayNowMusicState extends State<PlayNowMusic> {
     return PopScope(
       canPop: false, // جلوگیری از بستن پیش‌فرض صفحه
       onPopInvokedWithResult: (didPop, result) {
-        playAudioController.player.stop();
+        // playAudioController.player.stop();
         Get.offAll(() => HomePage());
       },
       child: Scaffold(

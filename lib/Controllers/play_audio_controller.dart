@@ -16,6 +16,12 @@ class PlayAudioController extends GetxController {
   late var playList;
   RxInt currentmusic = (0).obs;
   var response;
+  @override
+  void onClose() {
+    player.dispose(); // پاکسازی منابع پلیر
+    timer?.cancel(); // لغو تایمر پروگرس بار
+    super.onClose();
+  }
 
   @override
   void onInit() async {
@@ -43,6 +49,8 @@ class PlayAudioController extends GetxController {
 
   playAudio(singerId, musicid) async {
     // try {
+    // توقف موزیک قبلی
+    await player.stop();
     isplaying.value = true;
     loading.value = true;
     await player.stop();
