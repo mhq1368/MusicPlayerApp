@@ -9,7 +9,7 @@ class SmsVerifyController extends GetxController {
   var resultMessage = ''.obs;
   var remainSeconds = 0.obs;
   Timer? _timer;
-
+  final RxBool isenabledverifycode = false.obs;
   void startTimer() {
     remainSeconds.value = 60;
     _timer?.cancel();
@@ -30,8 +30,8 @@ class SmsVerifyController extends GetxController {
 
     isLoading.value = true;
     resultMessage.value = '';
+    isenabledverifycode.value = true;
 
-    // try {
     try {
       final response =
           await DioServices().postMethod(UrlConst.sendCodeToUser, mobileNumber);
@@ -46,6 +46,7 @@ class SmsVerifyController extends GetxController {
     }
 
     isLoading.value = false;
+    isenabledverifycode.value = false;
   }
 
   String _handleDioError(DioException e) {
