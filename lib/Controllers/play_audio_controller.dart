@@ -7,15 +7,19 @@ import 'package:music_player_app/Models/musics_model.dart';
 import 'package:music_player_app/Services/dio_connection.dart';
 
 class PlayAudioController extends GetxController {
-  var singerid, musicid;
+  // ignore: prefer_typing_uninitialized_variables
+  late var singerid, musicid;
   PlayAudioController({this.singerid, this.musicid});
   RxList<MusicModel> audiolist = RxList();
   RxBool isplaying = false.obs;
   RxBool loading = false.obs;
   var player = AudioPlayer();
+  // ignore: prefer_typing_uninitialized_variables
   late var playList;
-  RxInt currentmusic = (0).obs;
+  // ignore: prefer_typing_uninitialized_variables
   var response;
+  RxInt currentmusic = (0).obs;
+
   @override
   void onClose() {
     player.dispose(); // پاکسازی منابع پلیر
@@ -27,12 +31,12 @@ class PlayAudioController extends GetxController {
   void onInit() async {
     super.onInit();
     try {
-      player.processingStateStream.listen((state) {
-        if (state == ProcessingState.completed) {
-          player.seek(Duration.zero); // بازگشت به اول آهنگ
-          player.play(); // دوباره پخش کن
-        }
-      });
+      // player.processingStateStream.listen((state) {
+      //   if (state == ProcessingState.completed) {
+      //     player.seek(Duration.zero); // بازگشت به اول آهنگ
+      //     player.play(); // دوباره پخش کن
+      //   }
+      // });
       playList =
           ConcatenatingAudioSource(children: [], useLazyPreparation: true);
       player.currentIndexStream.listen((index) {
@@ -44,6 +48,7 @@ class PlayAudioController extends GetxController {
       await player.setAudioSource(playList,
           initialIndex: 0, initialPosition: Duration.zero);
       waitForDuration();
+      // ignore: empty_catches
     } catch (e) {}
   }
 
@@ -130,24 +135,28 @@ class PlayAudioController extends GetxController {
           bufferedValue.value = player.bufferedPosition;
         }
       });
+      // ignore: empty_catches
     } catch (e) {}
   }
 
   Future<void> waitForDuration() async {
-    int maxRetries = 10; // حداکثر تعداد تلاش‌ها
-    int attempts = 0; // شمارنده تلاش‌ها
+    try {
+      int maxRetries = 30; // حداکثر تعداد تلاش‌ها
+      int attempts = 0; // شمارنده تلاش‌ها
 
-    while (player.duration == null && attempts < maxRetries) {
-      debugPrint("Waiting for duration... Attempt: $attempts");
-      await Future.delayed(
-          Duration(milliseconds: 500)); // صبر به مدت 500 میلی‌ثانیه
-      attempts++;
-    }
+      while (player.duration == null && attempts < maxRetries) {
+        debugPrint("Waiting for duration... Attempt: $attempts");
+        await Future.delayed(
+            Duration(milliseconds: 500)); // صبر به مدت 500 میلی‌ثانیه
+        attempts++;
+      }
 
-    if (player.duration != null) {
-      startProgress();
-    } else {
-      debugPrint("Error: Duration is still null after multiple attempts!");
-    }
+      if (player.duration != null) {
+        startProgress();
+      } else {
+        debugPrint("Error: Duration is still null after multiple attempts!");
+      }
+      // ignore: empty_catches
+    } catch (e) {}
   }
 }

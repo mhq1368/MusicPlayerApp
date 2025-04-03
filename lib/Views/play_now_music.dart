@@ -15,6 +15,7 @@ class PlayNowMusic extends StatefulWidget {
   const PlayNowMusic({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _PlayNowMusicState createState() => _PlayNowMusicState();
 }
 
@@ -42,7 +43,7 @@ class _PlayNowMusicState extends State<PlayNowMusic> {
 
     debugPrint("Singer ID :$singerid");
     debugPrint("Music ID :${musicModel.musicId}");
-    playAudioController.currentmusic.value = musicModel.musicId!;
+    // playAudioController.currentmusic.value = musicModel.musicId!;
     var size = MediaQuery.of(context).size;
     return PopScope(
       canPop: false, // جلوگیری از بستن پیش‌فرض صفحه
@@ -181,18 +182,7 @@ class _PlayNowMusicState extends State<PlayNowMusic> {
                               itemCount: playAudioController.audiolist.length,
                               itemBuilder: (context, index) {
                                 return GestureDetector(
-                                  onTap: () {
-                                    playAudioController.isplaying.value = false;
-                                    playAudioController.player.stop();
-                                    Get.offAll(() => PlayNowMusic(),
-                                        arguments: {
-                                          'music': playAudioController
-                                              .audiolist[index],
-                                          'singerid': musicModel.singerId
-                                        });
-
-                                    debugPrint("s");
-                                  },
+                                  onTap: () {},
                                   child: Padding(
                                     padding: const EdgeInsets.fromLTRB(
                                         10, 20, 10, 0),
@@ -223,7 +213,8 @@ class _PlayNowMusicState extends State<PlayNowMusic> {
                                                         .audiolist[index]
                                                         .musicName!,
                                                     style: playAudioController
-                                                                .currentmusic ==
+                                                                .currentmusic
+                                                                .value ==
                                                             index
                                                         ? Theme.of(context)
                                                             .textTheme
@@ -241,7 +232,8 @@ class _PlayNowMusicState extends State<PlayNowMusic> {
                                                         .audiolist[index]
                                                         .musictime!,
                                                     style: playAudioController
-                                                                .currentmusic ==
+                                                                .currentmusic
+                                                                .value ==
                                                             index
                                                         ? Theme.of(context)
                                                             .textTheme
@@ -270,7 +262,8 @@ class _PlayNowMusicState extends State<PlayNowMusic> {
                                                   icon: Icon(CupertinoIcons
                                                       .play_circle_fill),
                                                   style: playAudioController
-                                                              .currentmusic ==
+                                                              .currentmusic
+                                                              .value ==
                                                           index
                                                       ? ButtonStyle(
                                                           iconColor:

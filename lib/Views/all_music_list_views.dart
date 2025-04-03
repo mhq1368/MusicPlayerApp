@@ -42,6 +42,7 @@ class AllMusicsListPage extends StatelessWidget {
                       },
                       child: SvgPicture.asset(
                         Assets.icons.arrowSmallLeft,
+                        // ignore: deprecated_member_use
                         color: Colors.white,
                         height: 32,
                       )),

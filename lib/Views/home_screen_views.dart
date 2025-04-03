@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:music_player_app/Views/all_music_list_views.dart';
+import 'package:music_player_app/Views/sms_verify_code_view.dart';
 import 'package:music_player_app/Widgets/Widgets_View/singers_list.dart';
 import 'package:music_player_app/Widgets/back_bottom_navbar.dart';
 import 'package:music_player_app/Widgets/bottom_navbar.dart';
@@ -36,7 +37,7 @@ class HomePage extends StatelessWidget {
                 ),
                 IconButton(
                     onPressed: () {
-                      // Get.off(() => SmsVerifyPage());
+                      Get.off(() => SmsVerifyPage());
                     },
                     icon: Icon(CupertinoIcons.profile_circled)),
               ],
