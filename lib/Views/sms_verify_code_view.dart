@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:music_player_app/Controllers/sms_verify_controller.dart';
 import 'package:music_player_app/Views/home_screen_views.dart';
+import 'package:music_player_app/Views/sms_verified_code_send_view.dart';
 
 class SmsVerifyPage extends StatelessWidget {
   SmsVerifyPage({super.key});
@@ -58,31 +59,15 @@ class SmsVerifyPage extends StatelessWidget {
                       decoration: BoxDecoration(
                           color: const Color.fromARGB(255, 255, 255, 255),
                           borderRadius: BorderRadius.circular(10)),
-                      child: Obx(() {
-                        return smsVC.isLoading.value == true ||
-                                smsVC.remainSeconds.value > 0
-                            ? TextField(
-                                enabled: false,
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: "نمونه درست : 9121234567",
-                                    hintStyle: Theme.of(context)
-                                        .textTheme
-                                        .labelMedium),
-                                cursorColor: Colors.black45,
-                              )
-                            : TextField(
-                                controller: _mobilephone,
-                                autocorrect: true,
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: "نمونه درست : 9121234567",
-                                    hintStyle: Theme.of(context)
-                                        .textTheme
-                                        .labelMedium),
-                                cursorColor: Colors.black45,
-                              );
-                      })),
+                      child: TextField(
+                        enabled: true,
+                        controller: _mobilephone,
+                        decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: "نمونه درست : 9121234567",
+                            hintStyle: Theme.of(context).textTheme.labelMedium),
+                        cursorColor: Colors.black45,
+                      )),
                 ),
                 SizedBox(
                   height: size.height / 20,
@@ -97,6 +82,9 @@ class SmsVerifyPage extends StatelessWidget {
                             null;
                           } else {
                             smsVC.sendVerificationCode(_mobilephone.text);
+                            Get.to(() => SmsVerifiedCodeSendView(),
+                                arguments: {'mobile': _mobilephone.text});
+                            debugPrint(_mobilephone.text);
                           }
                         },
                         child: Obx(() {

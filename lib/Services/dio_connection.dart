@@ -45,4 +45,9 @@ class DioServices {
       ]
     });
   }
+
+  // تایید کد ارسال شده به کاربر
+  Future<dynamic> postSendedCode(String url, String mobile, int code) async {
+    return await dio.post(url, data: {"mobile": mobile.trim(), "code": code});
+  }
 }

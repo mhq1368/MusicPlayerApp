@@ -8,6 +8,7 @@ class UrlConst {
   static String apilasttenmusic = "${baseapi}Musics/GetLastTenRecords";
   static String apimusiclistsinger = "${baseapi}Musics/";
   static String sendCodeToUser = "${baseapi}SmsVerify/send";
+  static String verifideSendedCode = "${baseapi}SmsVerify/verify";
   static String apiallmusics = "${baseapi}Musics/GetAllMusics";
   static String apimusicofsinger = "${baseapi}Singers/CountMusicsOfSinger/";
   static String apimusicListByID = "${baseapi}Musics/GetMusicListByID/";

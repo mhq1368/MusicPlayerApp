@@ -32,6 +32,7 @@ class MyApp extends StatelessWidget {
         locale: Locale('fa'),
         theme: lightTheme,
         darkTheme: darkTheme,
+        getPages: [GetPage(name: "/HomePage", page: () => HomePage())],
         home: HomePage());
   }
 }

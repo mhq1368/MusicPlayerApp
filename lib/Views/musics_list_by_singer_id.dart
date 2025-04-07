@@ -46,7 +46,8 @@ class MusicsListBySingerId extends StatelessWidget {
                   ),
                   InkWell(
                       onTap: () {
-                        Get.off(() => HomePage());
+                        Get.offAndToNamed(
+                            "/HomePage"); // به صفحه اصلی برمی‌گردد
                       },
                       child: SvgPicture.asset(
                         Assets.icons.arrowSmallLeft,

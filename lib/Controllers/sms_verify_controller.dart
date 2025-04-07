@@ -36,7 +36,7 @@ class SmsVerifyController extends GetxController {
       final response =
           await DioServices().postMethod(UrlConst.sendCodeToUser, mobileNumber);
       resultMessage.value = response.data['message'] ?? 'کد تایید ارسال شد';
-      startTimer();
+      // startTimer();
     } on DioException catch (e) {
       resultMessage.value = _handleDioError(e);
     } catch (e) {
