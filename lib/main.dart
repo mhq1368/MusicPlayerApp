@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:music_player_app/Controllers/theme_controller.dart';
+import 'package:music_player_app/Views/all_music_list_views.dart';
 import 'package:music_player_app/Views/home_screen_views.dart';
+import 'package:music_player_app/Views/user_profile_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,11 +30,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-        debugShowCheckedModeBanner: false,
-        locale: Locale('fa'),
-        theme: lightTheme,
-        darkTheme: darkTheme,
-        getPages: [GetPage(name: "/HomePage", page: () => HomePage())],
-        home: HomePage());
+      debugShowCheckedModeBanner: false,
+      locale: Locale('fa'),
+      theme: lightTheme,
+      darkTheme: darkTheme,
+      getPages: [
+        GetPage(name: homePage, page: () => HomePage()),
+        GetPage(name: allMusicsListPage, page: () => AllMusicsListPage())
+      ],
+      home: UserProfileViewPage(),
+    );
   }
+
+  static const homePage = '/HomePage';
+  static const allMusicsListPage = '/AllMusicList';
 }

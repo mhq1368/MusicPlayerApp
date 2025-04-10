@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:music_player_app/Controllers/sms_verify_controller.dart';
 import 'package:music_player_app/Views/home_screen_views.dart';
 import 'package:music_player_app/Views/sms_verified_code_send_view.dart';
+import 'package:music_player_app/gen/assets.gen.dart';
 
 class SmsVerifyPage extends StatelessWidget {
   SmsVerifyPage({super.key});
@@ -13,29 +14,39 @@ class SmsVerifyPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              "ورود به حساب کاربری",
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            IconButton(
-                onPressed: () {
-                  Get.off(() => HomePage());
-                },
-                icon: Icon(CupertinoIcons.home)),
-          ],
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "ورود به حساب کاربری",
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              IconButton(
+                  onPressed: () {
+                    Get.off(() => HomePage());
+                  },
+                  icon: Icon(CupertinoIcons.home)),
+            ],
+          ),
         ),
-      ),
-      body: SingleChildScrollView(
-        child: SizedBox(
+        body: Padding(
+          padding: const EdgeInsets.only(top: 25),
+          child: SizedBox(
+            height: size.height,
             width: double.infinity,
-            height: size.height / 1.2,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                // عکس کاربر
+
+                Image.asset(
+                  Assets.svg.userProfilePic1.path,
+                  alignment: Alignment.center,
+                  fit: BoxFit.fill,
+                  height: 95,
+                  width: 95,
+                ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 0, 50, 0),
                   child: SizedBox(
@@ -108,8 +119,8 @@ class SmsVerifyPage extends StatelessWidget {
                       style: Theme.of(context).textTheme.titleMedium,
                     )),
               ],
-            )),
-      ),
-    );
+            ),
+          ),
+        ));
   }
 }

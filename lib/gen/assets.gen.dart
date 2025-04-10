@@ -9,6 +9,27 @@
 
 import 'package:flutter/widgets.dart';
 
+class $AssetsSVGGen {
+  const $AssetsSVGGen();
+
+  /// File path: assets/SVG/MusicCover_Unknown.svg
+  String get musicCoverUnknown => 'assets/SVG/MusicCover_Unknown.svg';
+
+  /// File path: assets/SVG/UserProfilePic.svg
+  String get userProfilePic => 'assets/SVG/UserProfilePic.svg';
+
+  /// File path: assets/SVG/UserProfilePic1.png
+  AssetGenImage get userProfilePic1 =>
+      const AssetGenImage('assets/SVG/UserProfilePic1.png');
+
+  /// List of all assets
+  List<dynamic> get values => [
+    musicCoverUnknown,
+    userProfilePic,
+    userProfilePic1,
+  ];
+}
+
 class $AssetsFontsGen {
   const $AssetsFontsGen();
 
@@ -152,6 +173,7 @@ class $AssetsImagesGen {
 class Assets {
   const Assets._();
 
+  static const $AssetsSVGGen svg = $AssetsSVGGen();
   static const $AssetsFontsGen fonts = $AssetsFontsGen();
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();

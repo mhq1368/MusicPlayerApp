@@ -1,5 +1,5 @@
 class UrlConst {
-  static String baseapi = "http://192.168.188.100:5133/api/";
+  static String baseapi = "http://192.168.188.102:5133/api/";
   // static String baseapi = "http://apimusicplayer.mahfannavar.ir/api/";
   // static const String apiurl = 'http://10.0.2.2:5129/api/Podcast'; //لوکال هاست و نمایش روی وب
   static String apiurl =
