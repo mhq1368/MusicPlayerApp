@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -11,13 +12,17 @@ final Dio dio = Dio(BaseOptions(
 
 class DioServices {
   DioServices() {
-    // غیرفعال کردن بررسی SSL
-    (dio.httpClientAdapter as dynamic).onHttpClientCreate =
-        (HttpClient client) {
-      client.badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
-      return client;
-    };
+    try {
+      // غیرفعال کردن بررسی SSL
+      (dio.httpClientAdapter as dynamic).onHttpClientCreate =
+          (HttpClient client) {
+        client.badCertificateCallback =
+            (X509Certificate cert, String host, int port) => true;
+        return client;
+      };
+    } catch (e) {
+      debugPrint("Dio Error: $e");
+    }
   }
   Future<dynamic> getMethod(String url) async {
     dio.options.headers['content-Type'] = 'application/json'; //تعیین نوع هدر
@@ -26,7 +31,7 @@ class DioServices {
           .get(url,
               options: Options(responseType: ResponseType.json, method: 'GET'))
           .then((responseval) {
-        // log(responseval.toString());
+        log(responseval.toString());
         return responseval;
       });
     } catch (e) {

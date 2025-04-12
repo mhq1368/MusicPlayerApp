@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:music_player_app/Controllers/sms_verify_controller.dart';
-import 'package:music_player_app/Views/home_screen_views.dart';
 import 'package:music_player_app/Views/sms_verified_code_send_view.dart';
 import 'package:music_player_app/gen/assets.gen.dart';
+import 'package:music_player_app/main.dart';
 
 class SmsVerifyPage extends StatelessWidget {
   SmsVerifyPage({super.key});
@@ -21,11 +21,11 @@ class SmsVerifyPage extends StatelessWidget {
             children: [
               Text(
                 "ورود به حساب کاربری",
-                style: Theme.of(context).textTheme.titleLarge,
+                style: Theme.of(context).appBarTheme.titleTextStyle,
               ),
               IconButton(
                   onPressed: () {
-                    Get.off(() => HomePage());
+                    Get.offAndToNamed(AppRoutes.homePage);
                   },
                   icon: Icon(CupertinoIcons.home)),
             ],
@@ -53,7 +53,12 @@ class SmsVerifyPage extends StatelessWidget {
                     width: double.infinity,
                     child: Text(
                       "شماره همراه",
-                      style: Theme.of(context).textTheme.titleSmall,
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineSmall
+                          ?.copyWith(
+                              fontSize: 14,
+                              color: const Color.fromARGB(255, 255, 255, 255)),
                     ),
                   ),
                 ),
@@ -74,10 +79,18 @@ class SmsVerifyPage extends StatelessWidget {
                         enabled: true,
                         controller: _mobilephone,
                         decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: "نمونه درست : 9121234567",
-                            hintStyle: Theme.of(context).textTheme.labelMedium),
-                        cursorColor: Colors.black45,
+                          border: InputBorder.none,
+                          hintText: "نمونه درست : 9121234567",
+                          hintStyle: Theme.of(context)
+                              .textTheme
+                              .titleSmall
+                              ?.copyWith(color: Colors.black45),
+                        ),
+                        cursorColor: const Color.fromARGB(115, 100, 27, 27),
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleSmall
+                            ?.copyWith(color: Colors.black),
                       )),
                 ),
                 SizedBox(
@@ -103,12 +116,11 @@ class SmsVerifyPage extends StatelessWidget {
                                   smsVC.remainSeconds.value > 0
                               ? Text(
                                   smsVC.remainSeconds.value.toString(),
-                                  style: Theme.of(context).textTheme.labelSmall,
+                                  style: Theme.of(context).textTheme.titleSmall,
                                 )
                               : Text(
                                   "ارسال کد",
-                                  style:
-                                      Theme.of(context).textTheme.displaySmall,
+                                  style: Theme.of(context).textTheme.titleSmall,
                                 );
                         }))),
                 SizedBox(
@@ -116,7 +128,7 @@ class SmsVerifyPage extends StatelessWidget {
                 ),
                 Obx(() => Text(
                       smsVC.resultMessage.value,
-                      style: Theme.of(context).textTheme.titleMedium,
+                      style: Theme.of(context).textTheme.titleSmall,
                     )),
               ],
             ),

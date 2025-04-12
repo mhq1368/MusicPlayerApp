@@ -31,12 +31,16 @@ class PlayAudioController extends GetxController {
   void onInit() async {
     super.onInit();
     try {
-      // player.processingStateStream.listen((state) {
-      //   if (state == ProcessingState.completed) {
-      //     player.seek(Duration.zero); // بازگشت به اول آهنگ
-      //     player.play(); // دوباره پخش کن
-      //   }
-      // });
+      // گوش دادن به وضعیت پخش
+      player.playingStream.listen((isPlaying) {
+        isplaying.value = isPlaying;
+      });
+      player.processingStateStream.listen((state) {
+        if (state == ProcessingState.completed) {
+          player.seek(Duration.zero);
+          player.play();
+        }
+      });
       playList =
           ConcatenatingAudioSource(children: [], useLazyPreparation: true);
       player.currentIndexStream.listen((index) {
@@ -44,18 +48,18 @@ class PlayAudioController extends GetxController {
           currentmusic.value = index;
         }
       });
+
       await playAudio(singerid, musicid);
       await player.setAudioSource(playList,
           initialIndex: 0, initialPosition: Duration.zero);
-      waitForDuration();
+      startProgress();
       // ignore: empty_catches
     } catch (e) {}
   }
 
   playAudio(singerId, musicid) async {
     // try {
-    // توقف موزیک قبلی
-    await player.stop();
+    await waitForDuration();
     isplaying.value = true;
     loading.value = true;
     await player.stop();
@@ -66,6 +70,9 @@ class PlayAudioController extends GetxController {
         "Requesting: ${UrlConst.apimusiclistsinger + singerId.toString()}");
     response = await DioServices()
         .getMethod(UrlConst.apimusiclistsinger + singerId.toString());
+    // debugPrint("Response status: ${response.statusCode}");
+    // debugPrint("Response data: ${response.data}");
+
     if (response.statusCode == 200) {
       var musics = response.data['musics'] as List;
       // debugPrint("My Music Length: ${musics.length}");
@@ -141,7 +148,7 @@ class PlayAudioController extends GetxController {
 
   Future<void> waitForDuration() async {
     try {
-      int maxRetries = 30; // حداکثر تعداد تلاش‌ها
+      int maxRetries = 15; // حداکثر تعداد تلاش‌ها
       int attempts = 0; // شمارنده تلاش‌ها
 
       while (player.duration == null && attempts < maxRetries) {

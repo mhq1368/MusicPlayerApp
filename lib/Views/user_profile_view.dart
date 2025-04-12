@@ -26,10 +26,8 @@ class _UserProfileViewPageState extends State<UserProfileViewPage> {
             SizedBox(
               height: size.height / 25,
             ),
-            Text(
-              "کاربر گرامی  خوش آمدید",
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
+            Text("کاربر گرامی  خوش آمدید",
+                style: Theme.of(context).textTheme.titleMedium),
             MyDivider(appWidth: size.width),
           ],
         ),

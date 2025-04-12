@@ -1,12 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:music_player_app/Views/all_music_list_views.dart';
-import 'package:music_player_app/Views/sms_verify_code_view.dart';
 import 'package:music_player_app/Widgets/Widgets_View/singers_list.dart';
 import 'package:music_player_app/Widgets/back_bottom_navbar.dart';
 import 'package:music_player_app/Widgets/bottom_navbar.dart';
 import 'package:music_player_app/Widgets/drawer_widgets.dart';
+import 'package:music_player_app/main.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
@@ -37,7 +36,7 @@ class HomePage extends StatelessWidget {
                 ),
                 IconButton(
                     onPressed: () {
-                      Get.off(() => SmsVerifyPage());
+                      Get.offAndToNamed(AppRoutes.smsVerify);
                     },
                     icon: Icon(CupertinoIcons.profile_circled)),
               ],
@@ -61,7 +60,7 @@ class HomePage extends StatelessWidget {
                   decoration: InputDecoration(
                       border: InputBorder.none,
                       hintText: "خواننده ، نوا ، آلبوم",
-                      hintStyle: Theme.of(context).textTheme.labelMedium),
+                      hintStyle: Theme.of(context).textTheme.labelSmall),
                   cursorColor: Colors.black,
                 ),
               ),
@@ -72,7 +71,7 @@ class HomePage extends StatelessWidget {
                     onPressed: () {},
                     child: Text(
                       "جستجو",
-                      style: Theme.of(context).textTheme.displaySmall,
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ))),
             //خوانندگان برتر
             Padding(
@@ -82,15 +81,15 @@ class HomePage extends StatelessWidget {
                 children: [
                   Text(
                     "خوانندگان برتر",
-                    style: Theme.of(context).textTheme.titleSmall,
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                   InkWell(
                     onTap: () {
-                      Get.offAll(() => AllMusicsListPage());
+                      Get.offAndToNamed(AppRoutes.allMusicsListPage);
                     },
                     child: Text(
                       "نمایش همه",
-                      style: Theme.of(context).textTheme.titleSmall,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ),
                 ],

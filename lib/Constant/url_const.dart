@@ -12,6 +12,8 @@ class UrlConst {
   static String apiallmusics = "${baseapi}Musics/GetAllMusics";
   static String apimusicofsinger = "${baseapi}Singers/CountMusicsOfSinger/";
   static String apimusicListByID = "${baseapi}Musics/GetMusicListByID/";
+  static String apiGetUserInfoByPhoneAndUserid = "${baseapi}SmsVerify/getuser/";
+
   static const bapi = 'http://192.168.0.105:5133/api/';
 
   static const dlhost = 'https://www.dlfile.qassabi.ir';

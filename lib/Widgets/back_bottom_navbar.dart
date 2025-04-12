@@ -15,20 +15,20 @@ class BackbottomNavbar extends StatelessWidget {
       left: 0,
       right: 0,
       child: Container(
-        height: size.height / 6,
+        height: size.height / 9,
         width: size.width / 1.2,
         decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Color(0x00ffffff),
-                Color(0x00ffffff),
-                Color(0xddf5f5f5)
-              ], // لیست رنگ‌ها
-              begin: Alignment.topCenter, // نقطه‌ی شروع گرادینت
-              end: Alignment.bottomCenter, // نقطه‌ی پایان گرادینت
-            ),
-            borderRadius: BorderRadius.circular(0),
-            color: Color(0xffffffff)),
+          gradient: LinearGradient(
+            colors: [
+              Colors.white.withValues(alpha: 0), // کاملاً شفاف در بالا
+              Colors.white.withValues(alpha: 30), // نیمه‌شفاف وسط
+              Colors.white.withValues(alpha: 100), // تقریباً سفید پایین
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+          borderRadius: BorderRadius.circular(0),
+        ),
       ),
     );
   }

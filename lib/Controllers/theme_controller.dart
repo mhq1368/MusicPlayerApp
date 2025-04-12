@@ -17,34 +17,55 @@ final ThemeData lightTheme = ThemeData(
             fontSize: 14,
             color: const Color(0xFFf5f5f5))),
     textTheme: TextTheme(
-        titleSmall: TextStyle(
-            color: const Color(0xFFf5f5f5),
-            fontFamily: "Peyda-B",
-            fontSize: 14),
-        titleLarge: TextStyle(
-            color: const Color(0xFFf5f5f5),
-            fontSize: 17,
-            fontFamily: "Peyda-Bo"),
-        labelMedium: TextStyle(
-            color: Color.fromRGBO(0, 0, 0, 0.5),
-            fontSize: 15,
-            fontFamily: "Peyda-SB"),
-        displaySmall: TextStyle(
-            color: const Color(0xFFf5f5f5),
-            fontSize: 13,
-            fontFamily: "Peyda-M"),
-        displayLarge: TextStyle(
-            color: const Color(0x99ffffff),
-            fontSize: 13,
-            fontFamily: "Peyda-M"),
-        labelSmall: TextStyle(
-            color: const Color(0xFFf5f5f5),
-            fontSize: 15,
-            fontFamily: "Peyda-R"),
-        titleMedium: TextStyle(
-            color: const Color(0xFFf5f5f5),
-            fontSize: 12,
-            fontFamily: "Peyda-R")),
+      titleSmall: TextStyle(
+          color: const Color(0xFFf5f5f5),
+          fontFamily: "Peyda-M",
+          fontWeight: FontWeight.w300),
+      titleMedium: TextStyle(
+          color: const Color(0xFFf5f5f5),
+          fontFamily: "Peyda-M",
+          fontWeight: FontWeight.w600),
+      titleLarge: TextStyle(
+          color: const Color(0xFFf5f5f5),
+          fontFamily: "Peyda-M",
+          fontWeight: FontWeight.w900),
+      bodySmall: TextStyle(
+          color: const Color(0xFFf5f5f5),
+          fontFamily: "Peyda-L",
+          fontWeight: FontWeight.w300),
+      bodyMedium: TextStyle(
+          color: const Color(0xFFf5f5f5),
+          fontFamily: "Peyda-L",
+          fontWeight: FontWeight.w600),
+      bodyLarge: TextStyle(
+          color: const Color(0xFFf5f5f5),
+          fontFamily: "Peyda-L",
+          fontWeight: FontWeight.w900),
+      labelSmall: TextStyle(
+          color: const Color.fromARGB(255, 157, 157, 157),
+          fontFamily: "Peyda-R",
+          fontWeight: FontWeight.w300),
+      labelMedium: TextStyle(
+          color: const Color.fromARGB(255, 157, 157, 157),
+          fontFamily: "Peyda-R",
+          fontWeight: FontWeight.w600),
+      labelLarge: TextStyle(
+          color: const Color.fromARGB(255, 157, 157, 157),
+          fontFamily: "Peyda-R",
+          fontWeight: FontWeight.w900),
+      headlineSmall: TextStyle(
+          color: const Color(0xFFf5f5f5),
+          fontFamily: "Peyda-B",
+          fontWeight: FontWeight.w100),
+      headlineMedium: TextStyle(
+          color: const Color(0xFFf5f5f5),
+          fontFamily: "Peyda-B",
+          fontWeight: FontWeight.w600),
+      headlineLarge: TextStyle(
+          color: const Color(0xFFf5f5f5),
+          fontFamily: "Peyda-B",
+          fontWeight: FontWeight.w900),
+    ),
     iconTheme: IconThemeData(color: Color(0xFFf5f5f5)),
     elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(

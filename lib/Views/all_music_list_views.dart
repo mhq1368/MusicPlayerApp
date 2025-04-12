@@ -7,6 +7,7 @@ import 'package:music_player_app/Views/home_screen_views.dart';
 import 'package:music_player_app/Views/play_now_music.dart';
 import 'package:music_player_app/Widgets/back_bottom_navbar.dart';
 import 'package:music_player_app/Widgets/bottom_navbar.dart';
+import 'package:music_player_app/main.dart';
 
 import '../gen/assets.gen.dart';
 
@@ -51,7 +52,7 @@ class AllMusicsListPage extends StatelessWidget {
             )),
         body: Stack(children: [
           Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Center(
                 child: Padding(
@@ -88,102 +89,104 @@ class AllMusicsListPage extends StatelessWidget {
                   ]),
                 ),
               ),
-              SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                physics: BouncingScrollPhysics(),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: size.height * .51,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 100),
-                    child: Obx(
-                      () => ListView.builder(
-                        itemCount: musicsController.allmusiclist.length,
-                        itemBuilder: (context, index) {
-                          var music = musicsController.allmusiclist[index];
-                          return Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.only(top: 10, bottom: 5),
-                                  child: Container(
-                                    height: size.height / 11.5,
-                                    width: size.width / 1.1,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(25),
-                                        gradient: LinearGradient(
-                                            colors: [
-                                              Color(0xff6987B7),
-                                              Color(0xaa40577D),
-                                              Color(0xff1A2B47),
-                                            ],
-                                            begin: Alignment.topRight,
-                                            end: Alignment.bottomLeft)),
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          right: 25, left: 15),
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          Get.to(() => PlayNowMusic(),
-                                              arguments: {
-                                                'music': musicsController
-                                                    .allmusiclist[index],
-                                                'singerid': musicsController
-                                                    .allmusiclist[index]
-                                                    .singerId
-                                              });
-                                        },
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Text(music.musicName!,
+              Expanded(
+                child: Obx(
+                  () => ListView.builder(
+                    padding: EdgeInsets.only(bottom: 100),
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: musicsController.allmusiclist.length,
+                    itemBuilder: (context, index) {
+                      var music = musicsController.allmusiclist[index];
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 10, bottom: 10),
+                              child: Container(
+                                height: size.height / 11.5,
+                                width: size.width / 1.1,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(25),
+                                    gradient: LinearGradient(
+                                        colors: [
+                                          Color(0xff6987B7),
+                                          Color(0xaa40577D),
+                                          Color(0xff1A2B47),
+                                        ],
+                                        begin: Alignment.topRight,
+                                        end: Alignment.bottomLeft)),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      right: 15, left: 15),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Get.offAndToNamed(AppRoutes.playNow,
+                                          arguments: {
+                                            'music': musicsController
+                                                .allmusiclist[index],
+                                            'singerid': musicsController
+                                                .allmusiclist[index].singerId
+                                          });
+                                    },
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        const Icon(CupertinoIcons.music_note,
+                                            color: Colors.white, size: 22),
+                                        const SizedBox(width: 10),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                music.musicName ?? "",
                                                 style: Theme.of(context)
                                                     .textTheme
-                                                    .displaySmall),
-                                            Expanded(
-                                              child: SizedBox(
-                                                width: 20,
+                                                    .bodyMedium
+                                                    ?.copyWith(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                overflow: TextOverflow.ellipsis,
                                               ),
-                                            ),
-                                            Text(music.musictime!,
+                                              const SizedBox(height: 4),
+                                              Text(
+                                                music.musictime ?? "",
                                                 style: Theme.of(context)
                                                     .textTheme
-                                                    .displaySmall),
-                                            IconButton(
-                                              onPressed: () {
-                                                Get.to(() => PlayNowMusic(),
-                                                    arguments: {
-                                                      'music': musicsController
-                                                          .allmusiclist[index],
-                                                      'singerid':
-                                                          musicsController
-                                                              .allmusiclist[
-                                                                  index]
-                                                              .singerId
-                                                    });
-                                              },
-                                              icon: Icon(CupertinoIcons
-                                                  .play_circle_fill),
-                                              style: ButtonStyle(
-                                                  iconColor:
-                                                      WidgetStatePropertyAll(
-                                                          Colors.white)),
-                                            ),
-                                          ],
+                                                    .bodySmall
+                                                    ?.copyWith(
+                                                      color: Colors.white70,
+                                                    ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
+                                        IconButton(
+                                          onPressed: () {},
+                                          icon: const Icon(
+                                              CupertinoIcons.play_circle_fill,
+                                              size: 24),
+                                          color: Colors.white,
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
-                              ],
+                              ),
                             ),
-                          );
-                        },
-                      ),
-                    ),
+                          ],
+                        ),
+                      );
+                    },
                   ),
                 ),
               )

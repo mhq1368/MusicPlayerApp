@@ -25,7 +25,7 @@ class SmsVerifiedCodeSendView extends StatelessWidget {
           children: [
             Text(
               "ورود به حساب کاربری",
-              style: Theme.of(context).textTheme.titleLarge,
+              style: Theme.of(context).appBarTheme.titleTextStyle,
             ),
             IconButton(
                 onPressed: () {
@@ -102,7 +102,7 @@ class SmsVerifiedCodeSendView extends StatelessWidget {
                     },
                     child: Text(
                       "تایید کد",
-                      style: Theme.of(context).textTheme.labelSmall,
+                      style: Theme.of(context).textTheme.titleSmall,
                     ))),
             SizedBox(
               height: size.height / 25,
