@@ -80,6 +80,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/AvadisDesign.xd
   String get avadisDesign => 'assets/icons/AvadisDesign.xd';
 
+  /// File path: assets/icons/Logo.png
+  AssetGenImage get logo => const AssetGenImage('assets/icons/Logo.png');
+
   /// File path: assets/icons/arrow-small-left.svg
   String get arrowSmallLeft => 'assets/icons/arrow-small-left.svg';
 
@@ -135,6 +138,7 @@ class $AssetsIconsGen {
   /// List of all assets
   List<dynamic> get values => [
     avadisDesign,
+    logo,
     arrowSmallLeft,
     bookmarkPng,
     bookmarkSvg,

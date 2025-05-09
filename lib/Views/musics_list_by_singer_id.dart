@@ -283,7 +283,10 @@ class MusicsListBySingerId extends StatelessWidget {
           ),
         ),
         BackbottomNavbar(size: size),
-        BottomNavbar(size: size),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: BottomNavbar(size: size),
+        ),
       ]),
     );
   }

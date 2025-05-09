@@ -1,10 +1,11 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:music_player_app/Controllers/all_music_list_controller.dart';
 import 'package:music_player_app/Views/home_screen_views.dart';
-import 'package:music_player_app/Views/play_now_music.dart';
 import 'package:music_player_app/Widgets/back_bottom_navbar.dart';
 import 'package:music_player_app/Widgets/bottom_navbar.dart';
 import 'package:music_player_app/main.dart';
@@ -19,80 +20,78 @@ class AllMusicsListPage extends StatelessWidget {
     final AllMusicListController musicsController =
         Get.put(AllMusicListController());
     var size = MediaQuery.of(context).size;
-    return PopScope(
-      canPop: false, // جلوگیری از بستن پیش‌فرض صفحه
-      onPopInvokedWithResult: (didPop, result) {
-        Get.offAll(() => HomePage());
-      },
-      child: Scaffold(
-        appBar: AppBar(
-            toolbarHeight: 60,
-            automaticallyImplyLeading: false,
-            title: Padding(
-              padding: EdgeInsets.fromLTRB(15, 20, 15, 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "لیست  نوا ها",
-                    style: Theme.of(context).appBarTheme.titleTextStyle,
-                  ),
-                  InkWell(
-                      onTap: () {
-                        Get.off(() => HomePage());
-                      },
-                      child: SvgPicture.asset(
-                        Assets.icons.arrowSmallLeft,
-                        // ignore: deprecated_member_use
-                        color: Colors.white,
-                        height: 32,
-                      )),
-                ],
-              ),
-            )),
-        body: Stack(children: [
+    return Scaffold(
+      appBar: AppBar(
+          scrolledUnderElevation: 0,
+          toolbarHeight: 60,
+          automaticallyImplyLeading: false,
+          title: Padding(
+            padding: EdgeInsets.fromLTRB(15, 20, 15, 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "لیست  نوا ها",
+                  style: Theme.of(context).appBarTheme.titleTextStyle,
+                ),
+                InkWell(
+                    onTap: () {
+                      Get.off(() => HomePage());
+                    },
+                    child: SvgPicture.asset(
+                      Assets.icons.arrowSmallLeft,
+                      color: Colors.white,
+                      height: 32,
+                    )),
+              ],
+            ),
+          )),
+      body: WillPopScope(
+        onWillPop: () async {
+          Get.offAllNamed(AppRoutes.homePage);
+          return false;
+        },
+        child: Stack(children: [
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              SizedBox(
+                height: size.height / 35,
+              ),
               Center(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 35, 0, 25),
-                  child: Stack(children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(25),
-                      child: Stack(children: [
-                        Image.asset(
-                          Assets.images.freepik42489730.path,
-                          fit: BoxFit.cover,
-                          alignment: Alignment.topRight,
-                          width: size.width / 1.3,
-                          height: size.height / 3.5,
-                        ),
-                        Container(
-                          width: size.width / 1.3,
-                          height: size.height / 3.5,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                Color(0x00ffffff),
-                                Color.fromARGB(61, 255, 255, 255),
-                                Color.fromARGB(129, 245, 245, 245)
-                              ], // لیست رنگ‌ها
-                              begin: Alignment.topCenter, // نقطه‌ی شروع گرادینت
-                              end: Alignment
-                                  .bottomCenter, // نقطه‌ی پایان گرادینت
-                            ),
+                child: Stack(children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(25),
+                    child: Stack(children: [
+                      Image.asset(
+                        Assets.images.freepik42489730.path,
+                        fit: BoxFit.cover,
+                        alignment: Alignment.topRight,
+                        width: size.width / 1.3,
+                        height: size.height / 3.5,
+                      ),
+                      Container(
+                        width: size.width / 1.3,
+                        height: size.height / 3.5,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Color(0x00ffffff),
+                              Color.fromARGB(61, 255, 255, 255),
+                              Color.fromARGB(129, 245, 245, 245)
+                            ], // لیست رنگ‌ها
+                            begin: Alignment.topCenter, // نقطه‌ی شروع گرادینت
+                            end: Alignment.bottomCenter, // نقطه‌ی پایان گرادینت
                           ),
-                        )
-                      ]),
-                    ),
-                  ]),
-                ),
+                        ),
+                      )
+                    ]),
+                  ),
+                ]),
               ),
               Expanded(
                 child: Obx(
                   () => ListView.builder(
-                    padding: EdgeInsets.only(bottom: 100),
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     itemCount: musicsController.allmusiclist.length,
@@ -109,15 +108,21 @@ class AllMusicsListPage extends StatelessWidget {
                                 height: size.height / 11.5,
                                 width: size.width / 1.1,
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(25),
-                                    gradient: LinearGradient(
-                                        colors: [
-                                          Color(0xff6987B7),
-                                          Color(0xaa40577D),
-                                          Color(0xff1A2B47),
-                                        ],
-                                        begin: Alignment.topRight,
-                                        end: Alignment.bottomLeft)),
+                                  color: const Color(0xFF273A5D),
+                                  borderRadius: BorderRadius.circular(16),
+                                  border: Border.all(
+                                    color: Colors.white24,
+                                    width: 1.2,
+                                  ),
+                                  gradient: LinearGradient(
+                                      colors: [
+                                        Color.fromARGB(90, 105, 135, 183),
+                                        Color(0xaa40577D),
+                                        Color(0xff1A2B47),
+                                      ],
+                                      begin: Alignment.bottomLeft,
+                                      end: Alignment.topRight),
+                                ),
                                 child: Padding(
                                   padding: const EdgeInsets.only(
                                       right: 15, left: 15),
@@ -193,7 +198,10 @@ class AllMusicsListPage extends StatelessWidget {
             ],
           ),
           BackbottomNavbar(size: size),
-          BottomNavbar(size: size)
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: BottomNavbar(size: size),
+          ),
         ]),
       ),
     );

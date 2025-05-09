@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-SpinKitDualRing mainLoading(double appHeight) {
-  return SpinKitDualRing(
+SpinKitWave mainLoading(double appHeight) {
+  return SpinKitWave(
     color: Colors.white,
-    size: appHeight / 15,
+    size: appHeight / 14,
+    type: SpinKitWaveType.center,
   );
 }

@@ -10,6 +10,8 @@ android {
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
+    
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -19,6 +21,7 @@ android {
         jvmTarget = JavaVersion.VERSION_1_8
     }
 
+//تنظمات مربوط به نام و اپلیکیشن آی دی و ورژن اپ
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.example.music_player_app"
@@ -26,8 +29,8 @@ android {
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
-        versionCode = flutter.versionCode
-        versionName = flutter.versionName
+        versionCode = 1
+        versionName = "0.5.5"
     }
 
     buildTypes {
@@ -35,6 +38,22 @@ android {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig = signingConfigs.debug
+            shrinkResources true
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    // 👇 این قسمت مهمه و باید اینجا باشه
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            def appName = "AvadisMusicPlayer"
+            def versionName = variant.versionName
+            def versionCode = variant.versionCode
+            def buildType = variant.buildType.name
+
+            if (output.outputFileName != null && output.outputFileName.endsWith('.apk')) {
+                output.outputFileName = "${appName}_${buildType}_v${versionName}(${versionCode}).apk"
+            }
         }
     }
 }

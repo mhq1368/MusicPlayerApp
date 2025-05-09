@@ -20,9 +20,9 @@ class BackbottomNavbar extends StatelessWidget {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Colors.white.withValues(alpha: 0), // کاملاً شفاف در بالا
-              Colors.white.withValues(alpha: 30), // نیمه‌شفاف وسط
-              Colors.white.withValues(alpha: 100), // تقریباً سفید پایین
+              Color(0x00ffffff), // کاملاً شفاف در بالا
+              Color(0x30ffffff), // کاملاً شفاف در بالا
+              Color(0x99ffffff), // تقریباً سفید پایین
             ],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,

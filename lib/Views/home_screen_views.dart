@@ -1,3 +1,7 @@
+// ignore_for_file: deprecated_member_use
+
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -5,6 +9,8 @@ import 'package:music_player_app/Widgets/Widgets_View/singers_list.dart';
 import 'package:music_player_app/Widgets/back_bottom_navbar.dart';
 import 'package:music_player_app/Widgets/bottom_navbar.dart';
 import 'package:music_player_app/Widgets/drawer_widgets.dart';
+import 'package:music_player_app/Widgets/my_bottom_app.dart';
+import 'package:music_player_app/gen/assets.gen.dart';
 import 'package:music_player_app/main.dart';
 
 class HomePage extends StatelessWidget {
@@ -30,10 +36,28 @@ class HomePage extends StatelessWidget {
                       drawer.currentState!.openDrawer();
                     },
                     icon: Icon(Icons.menu)),
-                Text(
-                  "آوادیس",
-                  style: Theme.of(context).appBarTheme.titleTextStyle,
-                ),
+
+                //لوگو اپ با ایجاد سایه
+                Stack(alignment: Alignment.center, children: [
+                  ImageFiltered(
+                    imageFilter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+                    child: ColorFiltered(
+                      colorFilter: ColorFilter.mode(
+                        Colors.amber.withOpacity(0.6),
+                        BlendMode.srcATop,
+                      ),
+                      child: Image.asset(
+                        Assets.icons.logo.path,
+                        height: size.height / 11,
+                      ),
+                    ),
+                  ),
+                  Image.asset(
+                    Assets.icons.logo.path,
+                    height: size.height / 11,
+                  ),
+                ]),
+
                 IconButton(
                     onPressed: () {
                       Get.offAndToNamed(AppRoutes.smsVerify);
@@ -42,65 +66,64 @@ class HomePage extends StatelessWidget {
               ],
             ),
           )),
-      body: Stack(children: [
-        Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 25, 20, 20),
-              child: Container(
-                padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                width: size.width / 1,
-                // height: size.height / 4,
-                decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 255, 255, 255),
-                    borderRadius: BorderRadius.circular(10)),
-                child: TextField(
-                  controller: _search,
-                  autocorrect: true,
-                  decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: "خواننده ، نوا ، آلبوم",
-                      hintStyle: Theme.of(context).textTheme.labelSmall),
-                  cursorColor: Colors.black,
+      body: WillPopScope(
+        onWillPop: () async => false,
+        child: Stack(children: [
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 25, 20, 20),
+                child: Container(
+                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                  width: size.width / 1,
+                  // height: size.height / 4,
+                  decoration: BoxDecoration(
+                      color: const Color.fromARGB(255, 255, 255, 255),
+                      borderRadius: BorderRadius.circular(10)),
+                  child: TextField(
+                    controller: _search,
+                    autocorrect: true,
+                    decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: "خواننده ، نوا ، آلبوم",
+                        hintStyle: Theme.of(context).textTheme.labelSmall),
+                    cursorColor: Colors.black,
+                  ),
                 ),
               ),
-            ),
-            Center(
-                child: ElevatedButton(
-                    style: Theme.of(context).elevatedButtonTheme.style,
-                    onPressed: () {},
-                    child: Text(
-                      "جستجو",
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ))),
-            //خوانندگان برتر
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 30, 20, 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "خوانندگان برتر",
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      Get.offAndToNamed(AppRoutes.allMusicsListPage);
-                    },
-                    child: Text(
-                      "نمایش همه",
+              Center(child: myBottomAppBar(context, Text("جستجو"))),
+              //خوانندگان برتر
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 30, 20, 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "خوانندگان برتر",
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
-                  ),
-                ],
+                    InkWell(
+                      onTap: () {
+                        Get.offAndToNamed(AppRoutes.singersListPage);
+                      },
+                      child: Text(
+                        "نمایش همه",
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            SingersListHomePage(),
-          ],
-        ),
-        BackbottomNavbar(size: size),
-        BottomNavbar(size: size),
-      ]),
+              SingersListHomePage(),
+            ],
+          ),
+          BackbottomNavbar(size: size),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: BottomNavbar(size: size),
+          ),
+        ]),
+      ),
     );
   }
 }
