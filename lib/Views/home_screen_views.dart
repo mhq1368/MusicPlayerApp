@@ -48,13 +48,13 @@ class HomePage extends StatelessWidget {
                       ),
                       child: Image.asset(
                         Assets.icons.logo.path,
-                        height: size.height / 11,
+                        height: size.height / 15,
                       ),
                     ),
                   ),
                   Image.asset(
                     Assets.icons.logo.path,
-                    height: size.height / 11,
+                    height: size.height / 15,
                   ),
                 ]),
 
@@ -88,6 +88,7 @@ class HomePage extends StatelessWidget {
                         hintText: "خواننده ، نوا ، آلبوم",
                         hintStyle: Theme.of(context).textTheme.labelSmall),
                     cursorColor: Colors.black,
+                    style: Theme.of(context).textTheme.labelSmall,
                   ),
                 ),
               ),

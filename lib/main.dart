@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:get_storage_pro/get_storage_pro.dart';
 
 import 'package:music_player_app/Controllers/theme_controller.dart';
 import 'package:music_player_app/Views/all_music_list_views.dart';
@@ -12,6 +13,7 @@ import 'package:music_player_app/Views/sms_verified_code_send_view.dart';
 import 'package:music_player_app/Views/sms_verify_code_view.dart';
 
 void main() async {
+  await GetStoragePro.init();
   runApp(MyApp());
   WidgetsFlutterBinding.ensureInitialized();
 

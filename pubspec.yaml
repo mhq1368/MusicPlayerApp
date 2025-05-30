@@ -41,8 +41,8 @@ dependencies:
   just_audio: ^0.9.46
   get: ^4.7.2
   dio: ^5.8.0+1
-  shared_preferences: ^2.5.2
-  flutter_spinkit: ^5.2.1
+  get_storage_pro: ^0.1.8
+  flutter_spinkit: ^5.2.1 
   flutter_svg: ^2.0.17
   cached_network_image: ^3.4.1
   audio_video_progress_bar: ^2.0.3

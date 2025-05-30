@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 // تعریف تم‌های روشن و تاریک
 
@@ -111,42 +110,42 @@ class ThemeController extends GetxController {
   // تنظیم اولیه روی تم لایت
   final String prefskey = "isDarkMode";
   var themeMode = ThemeMode.light.obs;
-  @override
-  void onInit() {
-    super.onInit();
-    loadTheme();
-  }
+  // @override
+  // void onInit() {
+  //   super.onInit();
+  //   // loadTheme();
+  // }
 
   // تابع تغییر تم
-  void toggleTheme() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (themeMode.value == ThemeMode.light) {
-      themeMode.value = ThemeMode.dark;
-      // تغییر تم به صورت مستقیم
-      Get.changeTheme(darkTheme);
-      Get.changeThemeMode(ThemeMode.dark);
-      await prefs.setBool(prefskey, true);
-    } else {
-      themeMode.value = ThemeMode.light;
-      Get.changeTheme(lightTheme);
-      Get.changeThemeMode(ThemeMode.light);
-      await prefs.setBool(prefskey, false);
-    }
-  }
+  // void toggleTheme() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   if (themeMode.value == ThemeMode.light) {
+  //     themeMode.value = ThemeMode.dark;
+  //     // تغییر تم به صورت مستقیم
+  //     Get.changeTheme(darkTheme);
+  //     Get.changeThemeMode(ThemeMode.dark);
+  //     await prefs.setBool(prefskey, true);
+  //   } else {
+  //     themeMode.value = ThemeMode.light;
+  //     Get.changeTheme(lightTheme);
+  //     Get.changeThemeMode(ThemeMode.light);
+  //     await prefs.setBool(prefskey, false);
+  //   }
+  // }
 
-  void loadTheme() async {
-    final prefs = await SharedPreferences.getInstance();
-    bool? isDarkMode = prefs.getBool(prefskey);
+  // void loadTheme() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   bool? isDarkMode = prefs.getBool(prefskey);
 
-    if (isDarkMode != null && isDarkMode) {
-      themeMode.value = ThemeMode.dark;
-      // تغییر تم به صورت مستقیم
-      Get.changeTheme(darkTheme);
-      Get.changeThemeMode(ThemeMode.dark);
-    } else {
-      themeMode.value = ThemeMode.light;
-      Get.changeTheme(lightTheme);
-      Get.changeThemeMode(ThemeMode.light);
-    }
-  }
+  //   if (isDarkMode) {
+  //     themeMode.value = ThemeMode.dark;
+  //     // تغییر تم به صورت مستقیم
+  //     Get.changeTheme(darkTheme);
+  //     Get.changeThemeMode(ThemeMode.dark);
+  //   } else {
+  //     themeMode.value = ThemeMode.light;
+  //     Get.changeTheme(lightTheme);
+  //     Get.changeThemeMode(ThemeMode.light);
+  //   }
+  // }
 }

@@ -24,12 +24,24 @@ class DioServices {
       debugPrint("Dio Error: $e");
     }
   }
-  Future<dynamic> getMethod(String url) async {
+  Future<dynamic> getMethod(String url, {String? token}) async {
     dio.options.headers['content-Type'] = 'application/json'; //تعیین نوع هدر
     try {
       return await dio
           .get(url,
-              options: Options(responseType: ResponseType.json, method: 'GET'))
+              options: Options(
+                responseType: ResponseType.json,
+                method: 'GET',
+                headers: token != null
+                    ? {
+                        'Authorization': 'Bearer $token',
+                        'Content-Type': 'application/json',
+                      }
+                    : {
+                        // 'Authorization': 'Bearer $token',
+                        'Content-Type': 'application/json',
+                      },
+              ))
           .then((responseval) {
         log(responseval.toString());
         return responseval;

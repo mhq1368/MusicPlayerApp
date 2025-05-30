@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage_pro/get_storage_pro.dart';
 import 'package:music_player_app/Controllers/sms_verifyed_controller.dart';
 import 'package:music_player_app/Views/home_screen_views.dart';
 
@@ -78,8 +79,14 @@ class SmsVerifiedCodeSendView extends StatelessWidget {
                   decoration: InputDecoration(
                       border: InputBorder.none,
                       hintText: "ورود کد تایید",
-                      hintStyle: Theme.of(context).textTheme.labelMedium),
+                      hintStyle:
+                          Theme.of(context).textTheme.labelMedium?.copyWith(
+                                color: Colors.black45,
+                              )),
                   cursorColor: Colors.black45,
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                        color: Colors.black,
+                      ),
                 ),
               ),
             ),
@@ -90,15 +97,20 @@ class SmsVerifiedCodeSendView extends StatelessWidget {
             Center(
                 child: ElevatedButton(
                     style: Theme.of(context).elevatedButtonTheme.style,
-                    onPressed: () {
-                      smsVC.verifiedSendCode(
+                    onPressed: () async {
+                      await smsVC.verifiedSendCode(
                           mobilePhone, int.parse(sendedCode.text));
-                      if (smsVC.isSuccess == true) {
+                      if (smsVC.isSuccess.value == true) {
+                        // اگر کد تایید صحیح بود، به صفحه اصلی بروید
                         Get.offAndToNamed("/HomePage", arguments: {
                           "mobile": mobilePhone,
-                          "code": sendedCode.text
+                          "code": sendedCode.text,
+                          "token": smsVC.token.value
                         });
+                        GetStorage().write("token", smsVC.token.value);
                       }
+                      debugPrint(
+                          "isSuccess: ${smsVC.isSuccess.value} , token: ${smsVC.token.value}");
                     },
                     child: Text(
                       "تایید کد",
