@@ -63,6 +63,38 @@ class DioServices {
     });
   }
 
+  // ویرایش اطلاعات کاربر
+  // این متد فقط فیلدهای غیر null را ارسال می‌کند
+  Future<Response> updateUserInfo({
+    required String url,
+    required String token,
+    String? name,
+    bool? userSubscribers,
+  }) async {
+    // فقط فیلدهای غیر null ارسال بشن
+    final data = <String, dynamic>{};
+    if (name != null) data['namefmaily'] = name;
+    if (userSubscribers != null) data['userSubscribers'] = userSubscribers;
+
+    try {
+      final response = await dio.post(
+        url,
+        data: data,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+      log(response.toString());
+      return response;
+    } catch (e) {
+      debugPrint("Dio Error: $e");
+      rethrow;
+    }
+  }
+
   // تایید کد ارسال شده به کاربر
   Future<dynamic> postSendedCode(String url, String mobile, int code) async {
     return await dio.post(url, data: {"mobile": mobile.trim(), "code": code});

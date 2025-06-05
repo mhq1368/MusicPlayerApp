@@ -1,10 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:music_player_app/Constant/helper_size.dart';
 import 'package:music_player_app/Controllers/sms_verify_controller.dart';
 import 'package:music_player_app/Views/sms_verified_code_send_view.dart';
 import 'package:music_player_app/gen/assets.gen.dart';
-import 'package:music_player_app/main.dart';
 
 class SmsVerifyPage extends StatelessWidget {
   SmsVerifyPage({super.key});
@@ -12,7 +11,8 @@ class SmsVerifyPage extends StatelessWidget {
   final TextEditingController _mobilephone = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
+    final responsive = ResponsiveHelper(context);
+    // var size = MediaQuery.of(context).size;
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -23,18 +23,13 @@ class SmsVerifyPage extends StatelessWidget {
                 "ورود به حساب کاربری",
                 style: Theme.of(context).appBarTheme.titleTextStyle,
               ),
-              IconButton(
-                  onPressed: () {
-                    Get.offAndToNamed(AppRoutes.homePage);
-                  },
-                  icon: Icon(CupertinoIcons.home)),
             ],
           ),
         ),
         body: Padding(
           padding: const EdgeInsets.only(top: 25),
           child: SizedBox(
-            height: size.height,
+            height: responsive.screenHeight,
             width: double.infinity,
             child: Column(
               children: [
@@ -63,14 +58,14 @@ class SmsVerifyPage extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: size.height / 100,
+                  height: responsive.screenHeight / 100,
                 ),
                 //تکست فیلد برای ورود شماره همراه کاربر
                 Padding(
                   padding: const EdgeInsets.only(right: 50, left: 50),
                   child: Container(
                       padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                      width: size.width / 1,
+                      width: responsive.screenHeight / 1,
                       // height: size.height / 4,
                       decoration: BoxDecoration(
                           color: const Color.fromARGB(255, 255, 255, 255),
@@ -94,21 +89,38 @@ class SmsVerifyPage extends StatelessWidget {
                       )),
                 ),
                 SizedBox(
-                  height: size.height / 20,
+                  height: responsive.screenHeight / 30,
                 ),
                 //دکمه تایید ارسال کد
                 Center(
                     child: ElevatedButton(
-                        style: Theme.of(context).elevatedButtonTheme.style,
-                        onPressed: () {
+                        style: ElevatedButton.styleFrom(
+                          textStyle:
+                              TextStyle(color: Color.fromARGB(255, 6, 6, 6)),
+                          backgroundColor: Color(0xFF39FF14), // رنگ سبز
+                          padding: EdgeInsets.symmetric(
+                            horizontal: responsive.screenWidth / 7,
+                            vertical: responsive.screenHeight / 50,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        onPressed: () async {
                           if (smsVC.isLoading.value ||
                               smsVC.remainSeconds.value > 0) {
-                            null;
+                            return;
                           } else {
-                            smsVC.sendVerificationCode(_mobilephone.text);
-                            Get.to(() => SmsVerifiedCodeSendView(),
-                                arguments: {'mobile': _mobilephone.text});
+                            // if (smsVC.verificationCode.value.isNotEmpty) {
+                            await smsVC.sendVerificationCode(_mobilephone.text);
+                            Get.to(() => SmsVerifiedCodeSendView(), arguments: {
+                              'mobile': _mobilephone.text,
+                              'code': smsVC.verificationCode.value
+                            });
+                            // }
+
                             debugPrint(_mobilephone.text);
+                            debugPrint("Code:${smsVC.verificationCode.value}");
                           }
                         },
                         child: Obx(() {
@@ -120,16 +132,20 @@ class SmsVerifyPage extends StatelessWidget {
                                 )
                               : Text(
                                   "ارسال کد",
-                                  style: Theme.of(context).textTheme.titleSmall,
+                                  style: TextStyle(
+                                      color: Color(0xFF3C5782),
+                                      fontFamily: 'Peyda-M',
+                                      fontSize: responsive.screenHeight / 55,
+                                      fontWeight: FontWeight.w800),
                                 );
                         }))),
                 SizedBox(
-                  height: size.height / 25,
+                  height: responsive.screenHeight / 25,
                 ),
-                Obx(() => Text(
-                      smsVC.resultMessage.value,
-                      style: Theme.of(context).textTheme.titleSmall,
-                    )),
+                // Obx(() => Text(
+                //       smsVC.resultMessage.value,
+                //       style: Theme.of(context).textTheme.titleSmall,
+                //     )),
               ],
             ),
           ),

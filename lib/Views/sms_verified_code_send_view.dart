@@ -1,9 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage_pro/get_storage_pro.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:music_player_app/Constant/helper_size.dart';
 import 'package:music_player_app/Controllers/sms_verifyed_controller.dart';
-import 'package:music_player_app/Views/home_screen_views.dart';
 
 import '../gen/assets.gen.dart';
 
@@ -12,12 +11,16 @@ class SmsVerifiedCodeSendView extends StatelessWidget {
   final SmsVerifyedController smsVC = Get.put(SmsVerifyedController());
   final TextEditingController sendedCode = TextEditingController();
   late String mobilePhone;
+  late String verificationCode;
   SmsVerifiedCodeSendView({super.key}) {
     mobilePhone = Get.arguments['mobile'];
+    verificationCode = Get.arguments['code'];
   }
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
+    final responsive = ResponsiveHelper(context);
+    // var size = MediaQuery.of(context).size;
+    sendedCode.text = verificationCode;
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -28,11 +31,6 @@ class SmsVerifiedCodeSendView extends StatelessWidget {
               "ورود به حساب کاربری",
               style: Theme.of(context).appBarTheme.titleTextStyle,
             ),
-            IconButton(
-                onPressed: () {
-                  Get.off(() => HomePage());
-                },
-                icon: Icon(CupertinoIcons.home)),
           ],
         ),
       ),
@@ -61,14 +59,14 @@ class SmsVerifiedCodeSendView extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: size.height / 100,
+              height: responsive.screenHeight / 100,
             ),
             //تکست فیلد برای ورود کد تایید
             Padding(
               padding: const EdgeInsets.only(right: 50, left: 50),
               child: Container(
                 padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                width: size.width / 1,
+                width: responsive.screenHeight / 1,
                 // height: size.height / 4,
                 decoration: BoxDecoration(
                     color: const Color.fromARGB(255, 255, 255, 255),
@@ -91,12 +89,21 @@ class SmsVerifiedCodeSendView extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: size.height / 20,
+              height: responsive.screenHeight / 20,
             ),
             //دکمه تایید ارسال کد
             Center(
                 child: ElevatedButton(
-                    style: Theme.of(context).elevatedButtonTheme.style,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFF39FF14), // رنگ سبز
+                      padding: EdgeInsets.symmetric(
+                        horizontal: responsive.screenWidth / 7,
+                        vertical: responsive.screenHeight / 50,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
                     onPressed: () async {
                       await smsVC.verifiedSendCode(
                           mobilePhone, int.parse(sendedCode.text));
@@ -114,10 +121,14 @@ class SmsVerifiedCodeSendView extends StatelessWidget {
                     },
                     child: Text(
                       "تایید کد",
-                      style: Theme.of(context).textTheme.titleSmall,
+                      style: TextStyle(
+                          color: Color(0xFF3C5782),
+                          fontFamily: 'Peyda-M',
+                          fontSize: responsive.screenHeight / 55,
+                          fontWeight: FontWeight.w800),
                     ))),
             SizedBox(
-              height: size.height / 25,
+              height: responsive.screenHeight / 25,
             ),
             Obx(() => Text(
                   smsVC.resultMessage.value,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:music_player_app/Constant/url_const.dart';
 import 'package:music_player_app/Models/singer_model.dart';
 import 'package:music_player_app/Services/dio_connection.dart';
@@ -15,10 +16,12 @@ class SingersController extends GetxController {
     showsingerslist();
   }
 
+  final token = GetStorage().read('token');
   showsingerslist() async {
     try {
       isloading.value = true;
-      var response = await DioServices().getMethod(UrlConst.apiurl);
+      var response =
+          await DioServices().getMethod(UrlConst.apiurl, token: token);
       if (response.data != null) {
         var singers = response.data['singers'];
         if (response.statusCode == 200) {

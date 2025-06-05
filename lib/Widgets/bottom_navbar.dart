@@ -1,72 +1,10 @@
-// import 'package:flutter/cupertino.dart';
-// import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
-// import 'package:music_player_app/Views/all_music_list_views.dart';
-// import 'package:music_player_app/Views/home_screen_views.dart';
-
-// class BottomNavbar extends StatelessWidget {
-//   const BottomNavbar({
-//     super.key,
-//     required this.size,
-//   });
-
-//   final Size size;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Positioned(
-//       bottom: 20,
-//       left: 15,
-//       right: 15,
-//       child: Container(
-//         height: 75,
-//         width: double.infinity,
-//         padding: EdgeInsets.symmetric(horizontal: 5),
-//         decoration: BoxDecoration(
-//           borderRadius: BorderRadius.circular(20),
-//           color: Color(0xff1A2B47),
-//         ),
-//         child: Row(
-//           mainAxisAlignment: MainAxisAlignment.spaceAround,
-//           children: [
-//             IconButton(
-//                 onPressed: () {
-//                   Get.offAll(() => HomePage());
-//                 },
-//                 icon: Icon(
-//                   Icons.home,
-//                   color: Colors.white,
-//                 )),
-//             IconButton(
-//                 onPressed: () {
-//                   Get.offAll(() => AllMusicsListPage());
-//                 },
-//                 icon: Icon(
-//                   CupertinoIcons.music_note_list,
-//                   color: Colors.white,
-//                 )),
-//             IconButton(
-//                 onPressed: () {},
-//                 icon: Icon(
-//                   CupertinoIcons.profile_circled,
-//                   color: Colors.white,
-//                 )),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-// ignore_for_file: deprecated_member_use
-
 import 'dart:ui'; // برای blur
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:music_player_app/Views/all_music_list_views.dart';
-import 'package:music_player_app/Views/home_screen_views.dart';
+import 'package:music_player_app/Constant/helper_size.dart';
+import 'package:music_player_app/main.dart';
 
 class BottomNavbar extends StatelessWidget {
   const BottomNavbar({
@@ -79,6 +17,7 @@ class BottomNavbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // var size = MediaQuery.of(context).size;
+    final responsive = ResponsiveHelper(context);
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.only(left: 15, right: 15, bottom: 15),
@@ -91,10 +30,10 @@ class BottomNavbar extends StatelessWidget {
               width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 5),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.1), // شیشه‌ای با شفافیت
+                color: Colors.white.withAlpha(20), // شیشه‌ای با شفافیت
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                  color: Colors.white.withOpacity(0.3),
+                  color: Colors.white.withAlpha(70),
                   width: 1.0,
                 ),
               ),
@@ -103,27 +42,59 @@ class BottomNavbar extends StatelessWidget {
                 children: [
                   IconButton(
                     onPressed: () {
-                      Get.offAll(() => HomePage());
+                      Get.toNamed(AppRoutes.homePage);
                     },
-                    icon: const Icon(
-                      Icons.home,
-                      color: Colors.white,
+                    icon: Column(
+                      children: [
+                        Icon(
+                          Icons.home_filled,
+                          color: Colors.white,
+                        ),
+                        SizedBox(height: responsive.screenHeight / 100),
+                        Text("خانه",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold)),
+                      ],
                     ),
                   ),
                   IconButton(
                     onPressed: () {
-                      Get.offAll(() => const AllMusicsListPage());
+                      Get.toNamed(AppRoutes.allMusicsListPage);
                     },
-                    icon: const Icon(
-                      CupertinoIcons.music_note_list,
-                      color: Colors.white,
+                    icon: Column(
+                      children: [
+                        Icon(
+                          CupertinoIcons.music_note_list,
+                          color: Colors.white,
+                        ),
+                        SizedBox(height: responsive.screenHeight / 100),
+                        Text("نواها",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold)),
+                      ],
                     ),
                   ),
                   IconButton(
-                    onPressed: () {},
-                    icon: const Icon(
-                      CupertinoIcons.profile_circled,
-                      color: Colors.white,
+                    onPressed: () {
+                      Get.toNamed(AppRoutes.singersListPage);
+                    },
+                    icon: Column(
+                      children: [
+                        Icon(
+                          Icons.group,
+                          color: Colors.white,
+                        ),
+                        SizedBox(height: responsive.screenHeight / 100),
+                        Text("خوانندگان",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold)),
+                      ],
                     ),
                   ),
                 ],

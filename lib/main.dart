@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get_storage_pro/get_storage_pro.dart';
+import 'package:get_storage/get_storage.dart';
 
 import 'package:music_player_app/Controllers/theme_controller.dart';
 import 'package:music_player_app/Views/all_music_list_views.dart';
@@ -11,10 +11,13 @@ import 'package:music_player_app/Views/play_now_music.dart';
 import 'package:music_player_app/Views/singers_list_views.dart';
 import 'package:music_player_app/Views/sms_verified_code_send_view.dart';
 import 'package:music_player_app/Views/sms_verify_code_view.dart';
+import 'package:music_player_app/Views/splash_screen.dart';
+import 'package:music_player_app/Views/user_profile_view.dart';
 
 void main() async {
-  await GetStoragePro.init();
+  await GetStorage.init();
   runApp(MyApp());
+
   WidgetsFlutterBinding.ensureInitialized();
 
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -52,14 +55,18 @@ class MyApp extends StatelessWidget {
         GetPage(
             name: AppRoutes.smsVerified, page: () => SmsVerifiedCodeSendView()),
         GetPage(name: AppRoutes.singersListPage, page: () => SingersListPage()),
+        GetPage(
+            name: AppRoutes.userProfileInfo, page: () => UserProfileViewPage()),
+        GetPage(name: AppRoutes.spalsh, page: () => SplashScreen()),
       ],
-      initialRoute: AppRoutes.homePage,
+      initialRoute: AppRoutes.spalsh,
     );
   }
 }
 
 class AppRoutes {
   AppRoutes._();
+  static const spalsh = '/';
   static const homePage = '/HomePage';
   static const allMusicsListPage = '/AllMusicList';
   static const musicsListPageBySinger = '/MusicBySinger';
@@ -67,4 +74,5 @@ class AppRoutes {
   static const smsVerify = '/SMSVerify';
   static const smsVerified = '/SMSVerified';
   static const singersListPage = '/SingersListPage';
+  static const userProfileInfo = '/UserProfileInfo';
 }

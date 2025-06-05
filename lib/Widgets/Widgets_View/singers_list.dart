@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:music_player_app/Constant/functions.dart';
 import 'package:music_player_app/Controllers/singers_controller.dart';
 import 'package:music_player_app/Widgets/myloading.dart';
 import 'package:music_player_app/main.dart';
@@ -16,10 +18,24 @@ class SingersListHomePage extends StatefulWidget {
   State<SingersListHomePage> createState() => _SingersListHomePageState();
 }
 
+final box = GetStorage();
+
 class _SingersListHomePageState extends State<SingersListHomePage> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+
+    String? token = box.read('token');
+    debugPrint("TokenHome: $token");
+
+    // اگر توکن وجود نداشت، چیزی نمایش نده یا پیام بده
+    if (token == null || token.isEmpty) {
+      return Center(
+        child: Text("برای مشاهده لیست خواننده‌ها ابتدا وارد شوید."),
+      );
+    }
+    checkJwtExpirationAndLogout(token);
+
     return SizedBox(
       height: size.height / 3.1,
       width: double.infinity,

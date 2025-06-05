@@ -5,10 +5,10 @@ Widget myBottomAppBar(BuildContext context, Widget text) {
     height: 45,
     width: 100,
     decoration: BoxDecoration(
-      color: Color(0xffFF4081), // زمینه شیشه‌ای
+      color: Color(0xff39ff14),
       borderRadius: BorderRadius.circular(12),
       border: Border.all(
-        color: Color(0x80FF4081), // قاب صورتی نیمه‌شفاف
+        color: Color(0x8039ff20), // قاب صورتی نیمه‌شفاف
         width: 1.5,
       ),
     ),

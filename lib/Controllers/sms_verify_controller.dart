@@ -8,6 +8,8 @@ class SmsVerifyController extends GetxController {
   var isLoading = false.obs;
   var resultMessage = ''.obs;
   var remainSeconds = 0.obs;
+  var verificationCode = ''.obs;
+  var expireDate = ''.obs;
   Timer? _timer;
   final RxBool isenabledverifycode = false.obs;
   void startTimer() {
@@ -23,7 +25,9 @@ class SmsVerifyController extends GetxController {
   }
 
   Future<void> sendVerificationCode(String mobileNumber) async {
-    if (mobileNumber.isEmpty || mobileNumber.length != 10) {
+    if (mobileNumber.isEmpty ||
+        mobileNumber.length != 10 ||
+        mobileNumber.startsWith('0')) {
       resultMessage.value = "شماره موبایل نامعتبر است";
       return;
     }
@@ -36,6 +40,12 @@ class SmsVerifyController extends GetxController {
       final response =
           await DioServices().postMethod(UrlConst.sendCodeToUser, mobileNumber);
       resultMessage.value = response.data['message'] ?? 'کد تایید ارسال شد';
+      if (response.data['data'] != null &&
+          response.data['data']['code'] != null) {
+        verificationCode.value = response.data['data']['code'].toString();
+        expireDate.value = response.data['data']['expireDate'] ?? '';
+      }
+
       // startTimer();
     } on DioException catch (e) {
       resultMessage.value = _handleDioError(e);
