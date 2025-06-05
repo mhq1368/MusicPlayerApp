@@ -32,7 +32,7 @@ class _UserProfileViewPageState extends State<UserProfileViewPage> {
   @override
   Widget build(BuildContext context) {
     final isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
-    var size = MediaQuery.of(context).size;
+    // var size = MediaQuery.of(context).size;
     final responsive = ResponsiveHelper(context);
     final token = GetStorage().read('token');
     if (token != null && token.isNotEmpty) {
@@ -71,9 +71,6 @@ class _UserProfileViewPageState extends State<UserProfileViewPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(
-              height: responsive.screenHeight / 40,
-            ),
             AnimatedContainer(
               duration: Duration(seconds: 1),
               curve: Curves.easeInOutCubicEmphasized,
@@ -95,28 +92,35 @@ class _UserProfileViewPageState extends State<UserProfileViewPage> {
                 spacing: 15,
                 children: [
                   if (uic.fullName.value.isNotEmpty && !isEditing.value)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "نام کاربری : ",
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                        Text(
-                          uic.fullName.value,
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                        IconButton(
-                            onPressed: () {
-                              isEditing.value = true;
-                            },
-                            icon: Icon(Icons.edit)),
-                      ],
+                    Padding(
+                      padding: responsive.scaledPaddingLTRB(0, 0, 50, 0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Icon(Icons.person),
+                          SizedBox(width: responsive.screenWidth / 50),
+                          Text(
+                            "نام کاربری : ",
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                          Text(
+                            uic.fullName.value,
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          IconButton(
+                              onPressed: () {
+                                isEditing.value = true;
+                              },
+                              icon: Icon(Icons.edit)),
+                        ],
+                      ),
                     )
                   else
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
+                        Icon(Icons.person),
+                        SizedBox(width: responsive.screenWidth / 50),
                         Text(
                           "نام کاربری : ",
                           style: Theme.of(context).textTheme.bodyMedium,
@@ -132,31 +136,46 @@ class _UserProfileViewPageState extends State<UserProfileViewPage> {
                             icon: Icon(Icons.edit)),
                       ],
                     ),
-                  MyDivider(appWidth: size.width),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        uic.phone.value.isNotEmpty
-                            ? "شماره تلفن :   ${uic.phone.value}"
-                            : "شماره تلفن",
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                    ],
+                  MyDivider(appWidth: responsive.screenHeight / 20),
+                  Padding(
+                    padding: responsive.scaledPaddingLTRB(0, 0, 50, 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Icon(Icons.phone_android),
+                        SizedBox(width: responsive.screenWidth / 50),
+                        Text(
+                          uic.phone.value.isNotEmpty
+                              ? "شماره تلفن :   ${uic.phone.value}"
+                              : "شماره تلفن",
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                      ],
+                    ),
                   ),
-                  MyDivider(appWidth: size.width),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text("وضعیت اشتراک : ",
-                          style: Theme.of(context).textTheme.bodyMedium),
-                      Text(
-                        uic.isSubscriber.value
-                            ? "اشتراک فعال دارید"
-                            : "اشتراک فعال ندارید",
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                    ],
+                  MyDivider(appWidth: responsive.screenWidth),
+                  Padding(
+                    padding: responsive.scaledPaddingLTRB(0, 0, 50, 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SvgPicture.asset(
+                          Assets.icons.subscription,
+                          height: responsive.screenHeight / 35,
+                          // ignore: deprecated_member_use
+                          color: Colors.white,
+                        ),
+                        SizedBox(width: responsive.screenWidth / 50),
+                        Text("وضعیت اشتراک : ",
+                            style: Theme.of(context).textTheme.bodyMedium),
+                        Text(
+                          uic.isSubscriber.value
+                              ? "اشتراک فعال دارید"
+                              : "اشتراک فعال ندارید",
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                      ],
+                    ),
                   ),
                   SizedBox(
                     height: responsive.screenHeight / 40,
@@ -223,7 +242,17 @@ class _UserProfileViewPageState extends State<UserProfileViewPage> {
                               isEditing.value =
                                   false; // بعد از ویرایش برمی‌گرده
                             },
-                            icon: Icon(Icons.check)),
+                            icon: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.green,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Padding(
+                                padding:
+                                    EdgeInsets.all(responsive.scaleHeight * 15),
+                                child: Icon(Icons.check),
+                              ),
+                            )),
                       ],
                     ),
                 ],

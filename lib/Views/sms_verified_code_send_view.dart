@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:music_player_app/Constant/helper_size.dart';
@@ -72,6 +73,11 @@ class SmsVerifiedCodeSendView extends StatelessWidget {
                     color: const Color.fromARGB(255, 255, 255, 255),
                     borderRadius: BorderRadius.circular(10)),
                 child: TextField(
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [
+                    // فقط اعداد را مجاز می‌کند
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
                   controller: sendedCode,
                   enabled: true,
                   decoration: InputDecoration(
@@ -97,7 +103,7 @@ class SmsVerifiedCodeSendView extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFF39FF14), // رنگ سبز
                       padding: EdgeInsets.symmetric(
-                        horizontal: responsive.screenWidth / 7,
+                        horizontal: responsive.screenWidth / 10,
                         vertical: responsive.screenHeight / 50,
                       ),
                       shape: RoundedRectangleBorder(
@@ -124,8 +130,8 @@ class SmsVerifiedCodeSendView extends StatelessWidget {
                       style: TextStyle(
                           color: Color(0xFF3C5782),
                           fontFamily: 'Peyda-M',
-                          fontSize: responsive.screenHeight / 55,
-                          fontWeight: FontWeight.w800),
+                          fontSize: responsive.screenHeight / 66,
+                          fontWeight: FontWeight.w700),
                     ))),
             SizedBox(
               height: responsive.screenHeight / 25,

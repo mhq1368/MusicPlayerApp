@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:music_player_app/Constant/functions.dart';
 
 import 'package:music_player_app/Controllers/theme_controller.dart';
 import 'package:music_player_app/Views/all_music_list_views.dart';
@@ -15,21 +15,10 @@ import 'package:music_player_app/Views/splash_screen.dart';
 import 'package:music_player_app/Views/user_profile_view.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  setMySystemUIStyle();
   await GetStorage.init();
   runApp(MyApp());
-
-  WidgetsFlutterBinding.ensureInitialized();
-
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    systemNavigationBarColor: const Color(0xFF1A2B47).withAlpha(100),
-    systemNavigationBarIconBrightness: Brightness.light,
-    statusBarColor: Colors.transparent,
-    statusBarIconBrightness: Brightness.light,
-    systemNavigationBarDividerColor: const Color(0xff1A2B47),
-    systemNavigationBarContrastEnforced: true,
-    statusBarBrightness: Brightness.dark,
-    systemStatusBarContrastEnforced: true,
-  ));
 
   Get.put(ThemeController());
 }

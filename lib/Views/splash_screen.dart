@@ -16,6 +16,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     testApiConnection();
+    setMySystemUIStyle();
   }
 
   @override

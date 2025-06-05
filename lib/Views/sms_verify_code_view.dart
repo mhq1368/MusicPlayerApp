@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:music_player_app/Constant/functions.dart';
 import 'package:music_player_app/Constant/helper_size.dart';
 import 'package:music_player_app/Controllers/sms_verify_controller.dart';
 import 'package:music_player_app/Views/sms_verified_code_send_view.dart';
@@ -71,6 +73,12 @@ class SmsVerifyPage extends StatelessWidget {
                           color: const Color.fromARGB(255, 255, 255, 255),
                           borderRadius: BorderRadius.circular(10)),
                       child: TextField(
+                        keyboardType: TextInputType.phone,
+                        inputFormatters: [
+                          // فقط اعداد را مجاز می‌کند
+                          FilteringTextInputFormatter.digitsOnly,
+                          firstDigitNotZeroFormatter()
+                        ],
                         enabled: true,
                         controller: _mobilephone,
                         decoration: InputDecoration(
@@ -99,7 +107,7 @@ class SmsVerifyPage extends StatelessWidget {
                               TextStyle(color: Color.fromARGB(255, 6, 6, 6)),
                           backgroundColor: Color(0xFF39FF14), // رنگ سبز
                           padding: EdgeInsets.symmetric(
-                            horizontal: responsive.screenWidth / 7,
+                            horizontal: responsive.screenWidth / 10,
                             vertical: responsive.screenHeight / 50,
                           ),
                           shape: RoundedRectangleBorder(
@@ -107,17 +115,28 @@ class SmsVerifyPage extends StatelessWidget {
                           ),
                         ),
                         onPressed: () async {
+                          final validPhoneNumber =
+                              validPhone(_mobilephone.text);
                           if (smsVC.isLoading.value ||
                               smsVC.remainSeconds.value > 0) {
                             return;
-                          } else {
-                            // if (smsVC.verificationCode.value.isNotEmpty) {
+                          }
+                          {
+                            if (validPhoneNumber != null) {
+                              Get.snackbar(
+                                "خطا",
+                                validPhoneNumber, // پیام خطا از همون تابع
+                                snackPosition: SnackPosition.BOTTOM,
+                                backgroundColor: Colors.red,
+                                colorText: Colors.white,
+                              );
+                              return; // جلوی ادامه اجرا رو بگیر
+                            }
                             await smsVC.sendVerificationCode(_mobilephone.text);
                             Get.to(() => SmsVerifiedCodeSendView(), arguments: {
                               'mobile': _mobilephone.text,
                               'code': smsVC.verificationCode.value
                             });
-                            // }
 
                             debugPrint(_mobilephone.text);
                             debugPrint("Code:${smsVC.verificationCode.value}");
@@ -131,21 +150,17 @@ class SmsVerifyPage extends StatelessWidget {
                                   style: Theme.of(context).textTheme.titleSmall,
                                 )
                               : Text(
-                                  "ارسال کد",
+                                  "کد تایید رو ارسال کن",
                                   style: TextStyle(
                                       color: Color(0xFF3C5782),
                                       fontFamily: 'Peyda-M',
-                                      fontSize: responsive.screenHeight / 55,
-                                      fontWeight: FontWeight.w800),
+                                      fontSize: responsive.screenHeight / 66,
+                                      fontWeight: FontWeight.w700),
                                 );
                         }))),
                 SizedBox(
                   height: responsive.screenHeight / 25,
                 ),
-                // Obx(() => Text(
-                //       smsVC.resultMessage.value,
-                //       style: Theme.of(context).textTheme.titleSmall,
-                //     )),
               ],
             ),
           ),
