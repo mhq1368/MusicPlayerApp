@@ -12,6 +12,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:music_player_app/Constant/functions.dart';
 import 'package:music_player_app/Controllers/play_audio_controller.dart';
 import 'package:music_player_app/Models/musics_model.dart';
+import 'package:music_player_app/Widgets/loading_spin_kit_pulse.dart';
 import 'package:music_player_app/Widgets/myloading.dart';
 import 'package:music_player_app/main.dart';
 import '../gen/assets.gen.dart';
@@ -203,14 +204,16 @@ class _PlayNowMusicState extends State<PlayNowMusic> {
                                   playAudioController.currentmusic.value;
                               return GestureDetector(
                                 onTap: () async {
-                                  // if (playAudioController.isplaying.value) {
-                                  //   playAudioController.isplaying.value = false;
-                                  //   playAudioController.player.stop();
-                                  // }
+                                  if (!playAudioController.isplaying.value) {
+                                    await playAudioController.player.stop();
+                                  }
 
                                   await playAudioController.playAnotherMusic(
                                       list[index].singerId!,
                                       list[index].musicId!);
+                                  playAudioController.currentmusic.value = 0;
+                                  playAudioController.player
+                                      .seek(Duration.zero);
                                 },
                                 child: Padding(
                                   padding:
@@ -290,7 +293,8 @@ class _PlayNowMusicState extends State<PlayNowMusic> {
                               );
                             },
                           )
-                        : Center(child: mainLoading(appScreen.size.height / 3));
+                        : Center(
+                            child: mainLoadingPulse(appScreen.size.height / 3));
                   }),
                 ),
               ],
@@ -364,6 +368,7 @@ class _PlayNowMusicState extends State<PlayNowMusic> {
                             playAudioController.player.seekToNext();
                             playAudioController.currentmusic.value =
                                 playAudioController.player.currentIndex ?? 0;
+                            debugPrint("salam");
                           },
                           child: _controlIcon(Assets.icons.forward)),
                       GestureDetector(
