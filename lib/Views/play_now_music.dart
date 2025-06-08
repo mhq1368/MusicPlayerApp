@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:music_player_app/Constant/functions.dart';
 import 'package:music_player_app/Controllers/play_audio_controller.dart';
 import 'package:music_player_app/Models/musics_model.dart';
@@ -41,8 +42,14 @@ class _PlayNowMusicState extends State<PlayNowMusic> {
         PlayAudioController(musicid: musicModel.musicId, singerid: singerid));
   }
 
+  final box = GetStorage();
   @override
   Widget build(BuildContext context) {
+    String? token = box.read('token');
+    if (token != null && token.isNotEmpty) {
+      // بررسی انقضای توکن JWT و خروج در صورت انقضا
+      checkJwtExpirationAndLogout(token);
+    }
     var appScreen = MediaQuery.of(context);
     return Scaffold(
       appBar: AppBar(
@@ -90,7 +97,8 @@ class _PlayNowMusicState extends State<PlayNowMusic> {
                     child: Obx(() {
                       final list = playAudioController.audiolist;
                       final index = playAudioController.currentmusic.value;
-                      if (list.isEmpty || index >= list.length) {
+
+                      if (list.isEmpty) {
                         return SizedBox(
                           width: appScreen.size.width / 1.2,
                           height: appScreen.size.height / 4,
@@ -98,12 +106,14 @@ class _PlayNowMusicState extends State<PlayNowMusic> {
                               Center(child: mainLoading(appScreen.size.height)),
                         );
                       }
+                      // ایندکس امن با استفاده از مدولو
+                      final safeIdx = list.isEmpty ? 0 : index % list.length;
                       return CachedNetworkImage(
                         width: appScreen.size.width / 1.2,
                         height: appScreen.size.height / 4,
                         fit: BoxFit.cover,
                         alignment: Alignment.topCenter,
-                        imageUrl: list[index].musicCover ?? "",
+                        imageUrl: list[safeIdx].musicCover!,
                         placeholder: (context, url) =>
                             Center(child: mainLoading(appScreen.size.height)),
                         errorWidget: (context, url, error) => Center(
@@ -150,14 +160,16 @@ class _PlayNowMusicState extends State<PlayNowMusic> {
                           const SizedBox(width: 12),
                           Expanded(
                             child: Obx(() {
+                              playAudioController.waitForDuration();
                               final list = playAudioController.audiolist;
                               final index =
                                   playAudioController.currentmusic.value;
+                              final safeIdx =
+                                  list.isEmpty ? 0 : index % list.length;
                               return Text(
                                 list.isEmpty
                                     ? "در حال بارگذاری..."
-                                    : list[index].musicName ??
-                                        "نام نوا نامشخص است",
+                                    : list[safeIdx].musicName!,
                                 style: Theme.of(context)
                                     .textTheme
                                     .titleSmall!
@@ -190,19 +202,15 @@ class _PlayNowMusicState extends State<PlayNowMusic> {
                               final iscurrent = index ==
                                   playAudioController.currentmusic.value;
                               return GestureDetector(
-                                onTap: () {
-                                  Get.delete<PlayAudioController>();
+                                onTap: () async {
+                                  // if (playAudioController.isplaying.value) {
+                                  //   playAudioController.isplaying.value = false;
+                                  //   playAudioController.player.stop();
+                                  // }
 
-                                  if (playAudioController.isplaying.value) {
-                                    playAudioController.isplaying.value = false;
-                                    playAudioController.player.stop();
-                                  }
-
-                                  Get.offAndToNamed(AppRoutes.playNow,
-                                      arguments: {
-                                        'music': list[index],
-                                        'singerid': list[index].singerId,
-                                      });
+                                  await playAudioController.playAnotherMusic(
+                                      list[index].singerId!,
+                                      list[index].musicId!);
                                 },
                                 child: Padding(
                                   padding:

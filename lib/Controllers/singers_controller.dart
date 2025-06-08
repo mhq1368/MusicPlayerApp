@@ -9,6 +9,7 @@ class SingersController extends GetxController {
   RxBool isloading = false.obs;
   RxList<SingersModel> singerlist = RxList();
   int singerid = 0;
+  RxInt countmusics = 0.obs;
   @override
   void onInit() {
     super.onInit();

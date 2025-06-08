@@ -180,7 +180,7 @@ class HomePage extends StatelessWidget {
                   children: [
                     Text(
                       "خوانندگان برتر",
-                      style: Theme.of(context).textTheme.titleMedium,
+                      style: Theme.of(context).textTheme.titleSmall,
                     ),
                     InkWell(
                       onTap: () {
@@ -188,7 +188,7 @@ class HomePage extends StatelessWidget {
                       },
                       child: Text(
                         "نمایش همه",
-                        style: Theme.of(context).textTheme.titleMedium,
+                        style: Theme.of(context).textTheme.titleSmall,
                       ),
                     ),
                   ],
@@ -197,7 +197,8 @@ class HomePage extends StatelessWidget {
               SingersListHomePage(),
             ],
           ),
-          BackbottomNavbar(size: responsive.scaledBoxSize(0, 700)),
+          BackbottomNavbar(
+              size: responsive.scaledBoxSize(responsive.screenHeight, 700)),
           Align(
             alignment: Alignment.bottomCenter,
             child: BottomNavbar(size: responsive.scaledBoxSize(0, 20)),

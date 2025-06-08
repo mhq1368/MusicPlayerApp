@@ -10,7 +10,7 @@ final ThemeData lightTheme = ThemeData(
     appBarTheme: AppBarTheme(
         iconTheme: IconThemeData(color: Color(0xFFf5f5f5)),
         shadowColor: const Color(0xFFFFFFFF),
-        backgroundColor: Color(0xFF1A2B47),
+        backgroundColor: Color(0xFF1A2B47).withOpacity(0.3),
         titleTextStyle: TextStyle(
             fontFamily: "Peyda-B",
             fontSize: 14,

@@ -64,7 +64,7 @@ void checkJwtExpirationAndLogout(String token) {
       Get.offAllNamed('/SmsVerify'); // مسیر ورود
       Get.snackbar(
         "هشدار",
-        "نشست شما منقضی شده است. لطفاً دوباره وارد شوید.",
+        "مدت زمان ورود قبلی شما منقضی شده است. لطفاً دوباره وارد شوید.",
         snackPosition: SnackPosition.BOTTOM,
       );
     }

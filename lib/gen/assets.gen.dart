@@ -102,8 +102,11 @@ class $AssetsIconsGen {
   /// File path: assets/icons/home.svg
   String get home => 'assets/icons/home.svg';
 
+  /// File path: assets/icons/leave.png
+  AssetGenImage get leavePng => const AssetGenImage('assets/icons/leave.png');
+
   /// File path: assets/icons/leave.svg
-  String get leave => 'assets/icons/leave.svg';
+  String get leaveSvg => 'assets/icons/leave.svg';
 
   /// File path: assets/icons/list-music.svg
   String get listMusic => 'assets/icons/list-music.svg';
@@ -145,7 +148,8 @@ class $AssetsIconsGen {
     circleUser,
     forward,
     home,
-    leave,
+    leavePng,
+    leaveSvg,
     listMusic,
     menuBurger,
     microphone,

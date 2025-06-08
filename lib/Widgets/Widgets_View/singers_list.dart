@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:music_player_app/Constant/functions.dart';
 import 'package:music_player_app/Controllers/singers_controller.dart';
+import 'package:music_player_app/Widgets/loading_spin_kit_pulse.dart';
 import 'package:music_player_app/Widgets/myloading.dart';
 import 'package:music_player_app/main.dart';
 
@@ -42,7 +43,7 @@ class _SingersListHomePageState extends State<SingersListHomePage> {
       child: Obx(() {
         if (widget.singersController.isloading.value ||
             widget.singersController.singerlist.isEmpty) {
-          return mainLoading(size.height / 2); // return اضافه شد
+          return mainLoadingPulse(size.height / 2); // return اضافه شد
         } else {
           return ListView.builder(
             scrollDirection: Axis.horizontal,

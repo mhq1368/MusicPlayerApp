@@ -52,59 +52,53 @@ class PlayAudioController extends GetxController {
       await playAudio(singerid, musicid);
       await player.setAudioSource(playList,
           initialIndex: 0, initialPosition: Duration.zero);
-      startProgress();
+      player.durationStream.listen(
+        (event) {
+          if (event != null) {
+            startProgress();
+          }
+        },
+      );
+      player.currentIndexStream.listen((idx) {
+        currentmusic.value = idx ?? 0;
+      });
+
       // ignore: empty_catches
     } catch (e) {}
   }
 
-  playAudio(singerId, musicid) async {
-    // try {
-    await waitForDuration();
-    isplaying.value = true;
+  Future<void> playAudio(singerId, musicid) async {
+    Future.delayed(Duration(seconds: 3));
+    isplaying.value = false;
     loading.value = true;
     await player.stop();
-    await player.seek(Duration.zero);
     audiolist.clear();
     playList.clear();
-    debugPrint(
-        "Requesting: ${UrlConst.apimusiclistsinger + singerId.toString()}");
+    // دیتا رو بگیر
     response = await DioServices()
         .getMethod(UrlConst.apimusiclistsinger + singerId.toString());
-    // debugPrint("Response status: ${response.statusCode}");
-    // debugPrint("Response data: ${response.data}");
-
     if (response.statusCode == 200) {
       var musics = response.data['musics'] as List;
-      // debugPrint("My Music Length: ${musics.length}");
-// یافتن آیتم موردنظر
       var targetMusic = musics.firstWhere(
         (music) => music['musicId'] == musicid,
         orElse: () => null,
       );
       if (targetMusic != null) {
-        musics.remove(targetMusic); // حذف از لیست
-        musics.insert(0, targetMusic); // اضافه کردن به اول لیست
-      }
-      for (int i = 0; i <= musics.length - 1; i++) {
-        if (i > musics.length) {
-          i = musics[i]['musicId'];
-        }
+        musics.remove(targetMusic);
+        musics.insert(0, targetMusic);
       }
 
-      for (var elements in musics) {
-        var musicModel = MusicModel.fromJson(elements);
-        audiolist.add(musicModel);
-        playList.add(AudioSource.uri(
-            Uri.parse(MusicModel.fromJson(elements).musicUrl!)));
-      }
+      final musicModels = musics.map((e) => MusicModel.fromJson(e)).toList();
+      final audioSources = musicModels
+          .map((music) => AudioSource.uri(Uri.parse(music.musicUrl!)))
+          .toList();
+
+      audiolist.assignAll(musicModels);
+      playList.addAll(audioSources);
 
       loading.value = false;
-      isplaying.value = false;
-      return true;
+      return;
     }
-    // } catch (e) {
-    //   debugPrint("Error in playAudio: $e");
-    // }
   }
 
 // برای پروگرس بار
@@ -147,23 +141,61 @@ class PlayAudioController extends GetxController {
   }
 
   Future<void> waitForDuration() async {
-    try {
-      int maxRetries = 15; // حداکثر تعداد تلاش‌ها
-      int attempts = 0; // شمارنده تلاش‌ها
-
-      while (player.duration == null && attempts < maxRetries) {
-        debugPrint("Waiting for duration... Attempt: $attempts");
-        await Future.delayed(
-            Duration(milliseconds: 500)); // صبر به مدت 500 میلی‌ثانیه
-        attempts++;
-      }
-
+    const maxRetries = 15;
+    for (int attempts = 0; attempts < maxRetries; attempts++) {
       if (player.duration != null) {
         startProgress();
-      } else {
-        debugPrint("Error: Duration is still null after multiple attempts!");
+        return;
       }
-      // ignore: empty_catches
-    } catch (e) {}
+      debugPrint("Waiting for duration... Attempt: $attempts");
+      await Future.delayed(Duration(milliseconds: 500));
+    }
+    debugPrint("Error: Duration is still null after $maxRetries attempts!");
   }
+
+  // Future<void> waitForDuration() async {
+  //   try {
+  //     int maxRetries = 15; // حداکثر تعداد تلاش‌ها
+  //     int attempts = 0; // شمارنده تلاش‌ها
+
+  //     while (player.duration == null && attempts < maxRetries) {
+  //       debugPrint("Waiting for duration... Attempt: $attempts");
+  //       await Future.delayed(
+  //           Duration(seconds: 500)); // صبر به مدت 500 میلی‌ثانیه
+  //       attempts++;
+  //     }
+
+  //     if (player.duration != null) {
+  //       startProgress();
+  //     } else {
+  //       debugPrint("Error: Duration is still null after multiple attempts!");
+  //     }
+  //     // ignore: empty_catches
+  //   } catch (e) {}
+  // }
+
+  Future<void> playAnotherMusic(int singerId, int musicId) async {
+    // لیست رو از سرور بگیر و playList رو پر کن
+    await playAudio(singerId, musicId);
+    // حالا پلیر رو روی پلی لیست جدید ست کن
+    await player.setAudioSource(playList,
+        initialIndex: 0, initialPosition: Duration.zero);
+    // بعدش ایندکس رو بگذار رو 0 (یا هر ایندکس دلخواه)
+    currentmusic.value = 0;
+    // پروگرس بار رو فعال کن
+    startProgress();
+    // اگر می‌خوای آهنگ اتوماتیک پخش شه:
+    // await player.play();
+    // isplaying.value = true;
+  }
+
+  // Future<void> playAnotherMusic(int singerId, int musicId) async {
+  //   await playAudio(singerId, musicId);
+  //   await player.setAudioSource(playList, initialIndex: 0);
+
+  //   // await player.play();
+  //   // isplaying.value = true;
+  //   currentmusic.value = 0; // این خط مهم است
+  //   startProgress();
+  // }
 }

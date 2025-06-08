@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:music_player_app/Constant/helper_size.dart';
 import 'package:music_player_app/Controllers/musics_list_controller_by_singer.dart';
 import 'package:music_player_app/Models/singer_model.dart';
 import 'package:music_player_app/Widgets/back_bottom_navbar.dart';
@@ -25,6 +26,7 @@ class MusicsListBySingerId extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    final responsive = ResponsiveHelper(context);
     return Scaffold(
       appBar: AppBar(
           toolbarHeight: 60,
@@ -106,7 +108,7 @@ class MusicsListBySingerId extends StatelessWidget {
                             padding: const EdgeInsets.only(right: 45, top: 25),
                             child: Obx(
                               () => Text(
-                                  'تعداد آهنگ :   ${musicsListControllerBySinger.countmusics}',
+                                  'تعداد نوا :   ${musicsListControllerBySinger.countmusics}',
                                   style: Theme.of(context).textTheme.bodySmall),
                             ),
                           ),
@@ -282,7 +284,8 @@ class MusicsListBySingerId extends StatelessWidget {
             ),
           ),
         ),
-        BackbottomNavbar(size: size),
+        BackbottomNavbar(
+            size: responsive.scaledBoxSize(responsive.screenHeight, 700)),
         Align(
           alignment: Alignment.bottomCenter,
           child: BottomNavbar(size: size),

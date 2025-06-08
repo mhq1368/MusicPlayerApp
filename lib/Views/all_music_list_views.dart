@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:music_player_app/Constant/functions.dart';
+import 'package:music_player_app/Constant/helper_size.dart';
 import 'package:music_player_app/Controllers/all_music_list_controller.dart';
 import 'package:music_player_app/Views/home_screen_views.dart';
 import 'package:music_player_app/Widgets/back_bottom_navbar.dart';
@@ -20,13 +22,20 @@ class AllMusicsListPage extends StatelessWidget {
     final AllMusicListController musicsController =
         Get.put(AllMusicListController());
     var size = MediaQuery.of(context).size;
+    final responsive = ResponsiveHelper(context);
+    String? token = box.read('token');
+    if (token != null && token.isNotEmpty) {
+      // بررسی انقضای توکن JWT و خروج در صورت انقضا
+      checkJwtExpirationAndLogout(token);
+    }
     return Scaffold(
       appBar: AppBar(
           scrolledUnderElevation: 0,
-          toolbarHeight: 60,
+          elevation: 0,
+          toolbarHeight: responsive.screenHeight / 11,
           automaticallyImplyLeading: false,
           title: Padding(
-            padding: EdgeInsets.fromLTRB(15, 20, 15, 20),
+            padding: responsive.scaledPaddingLTRB(15, 20, 15, 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -197,7 +206,8 @@ class AllMusicsListPage extends StatelessWidget {
               )
             ],
           ),
-          BackbottomNavbar(size: size),
+          BackbottomNavbar(
+              size: responsive.scaledBoxSize(responsive.screenHeight, 700)),
           Align(
             alignment: Alignment.bottomCenter,
             child: BottomNavbar(size: size),
