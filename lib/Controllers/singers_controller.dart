@@ -22,6 +22,7 @@ class SingersController extends GetxController {
     try {
       singerlist.clear();
       isloading.value = true;
+      Future.delayed(const Duration(seconds: 3));
       var response =
           await DioServices().getMethod(UrlConst.apiurl, token: token);
       if (response.data != null) {

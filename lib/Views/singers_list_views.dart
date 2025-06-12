@@ -63,6 +63,11 @@ class SingersListPage extends StatelessWidget {
           Padding(
             padding: responsive.scaledPaddingLTRB(15, 0, 15, 30),
             child: Obx(() {
+              if (singersController.singerlist.isEmpty) {
+                return Center(
+                  child: mainLoadingPulse(responsive.screenHeight / 2),
+                );
+              }
               return ListView.builder(
                 padding: responsive.scaledPaddingLTRB(
                     0, 10, 0, 70), // 👈 این خط مهمه

@@ -41,7 +41,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       key: drawer,
-      drawer: drawerApp(responsive.scaledBoxSize(20, 50), context),
+      drawer: drawerApp(context),
       appBar: AppBar(
           scrolledUnderElevation: 0,
           elevation: 0,

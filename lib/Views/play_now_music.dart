@@ -383,12 +383,14 @@ class _PlayNowMusicState extends State<PlayNowMusic> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      _controlIcon(Assets.icons.bookmarkSvg),
+                      // _controlIcon(Assets.icons.bookmarkSvg),
                       GestureDetector(
                           onTap: () {
+                            playAudioController.isplaying.value = false;
                             playAudioController.player.seekToNext();
                             playAudioController.currentmusic.value =
                                 playAudioController.player.currentIndex ?? 0;
+                            playAudioController.isplaying.value = true;
                             debugPrint("salam");
                           },
                           child: _controlIcon(Assets.icons.forward)),
@@ -439,9 +441,11 @@ class _PlayNowMusicState extends State<PlayNowMusic> {
                       ),
                       GestureDetector(
                           onTap: () {
+                            playAudioController.isplaying.value = false;
                             playAudioController.player.seekToPrevious();
                             playAudioController.currentmusic.value =
                                 playAudioController.player.currentIndex ?? 0;
+                            playAudioController.isplaying.value = true;
                           },
                           child: _controlIcon(Assets.icons.rewind)),
                       // _controlIcon(Assets.icons.shuffle),

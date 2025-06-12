@@ -111,6 +111,7 @@ class PlayAudioController extends GetxController {
       // isplaying.value = true;
       const tickk = Duration(seconds: 1);
       debugPrint("Duration :  ${player.duration}");
+
       // int duration = player.duration!.inSeconds;
       int duration = player.duration!.inSeconds - player.position.inSeconds;
 
@@ -156,7 +157,7 @@ class PlayAudioController extends GetxController {
   Future<void> playAnotherMusic(int singerId, int musicId) async {
     Future.delayed(Duration(seconds: 3));
     loading.value = true;
-
+    isplaying.value = false;
     await player.stop();
     audiolist.clear();
     playList.clear();
