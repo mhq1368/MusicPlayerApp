@@ -22,6 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     final responsive = ResponsiveHelper(context);
+
     return Scaffold(
       body: Center(
         child: Column(

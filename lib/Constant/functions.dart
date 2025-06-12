@@ -76,7 +76,8 @@ void checkJwtExpirationAndLogout(String token) {
 // تست api کانکشن
 Future<void> testApiConnection() async {
   {
-    final response = await DioServices().getMethod(UrlConst.baseapi);
+    final response = await DioServices()
+        .getMethod("${UrlConst.baseapi}swagger/v1/swagger.json");
 
     //صبر اجباری
     await Future.delayed(Duration(seconds: 2));
@@ -89,6 +90,7 @@ Future<void> testApiConnection() async {
         return;
       }
       Get.offNamed(AppRoutes.homePage);
+      debugPrint("Test :${response.data.toString()}");
     }
   }
 }
@@ -96,6 +98,9 @@ Future<void> testApiConnection() async {
 // تنظیمات بالا و پایین سیستم
 
 void setMySystemUIStyle() {
+  // تنظیمات نوار وضعیت و نوار ناوبری
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+      overlays: [SystemUiOverlay.top]); // فقط نوار وضعیت را نمایش می‌دهد
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     systemNavigationBarColor: const Color(0xFF1A2B47).withAlpha(100),
     systemNavigationBarIconBrightness: Brightness.light,

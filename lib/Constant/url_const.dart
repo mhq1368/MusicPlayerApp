@@ -1,11 +1,14 @@
 class UrlConst {
   // static String baseapi = "http://192.168.0.105:5133/api/";
+  // static const String apiurl = 'http://10.0.2.2:5129/api/Podcast'; //لوکال هاست و نمایش روی وب
+  // static String baseapi = "https://musicplayer.kala210.ir/";
 
-  // static String baseapi = "http://192.168.188.100:5133/";
+  static String baseapi = "http://192.168.188.100:5133/";
+  // static String baseapi = "http://192.168.144.201:5133/";
+
   static String baseapiweb = "api/";
   static String baseapimusicAndbaseapi = baseapi + baseapiweb;
-  static String baseapi = "https://musicplayer.kala210.ir/";
-  // static const String apiurl = 'http://10.0.2.2:5129/api/Podcast'; //لوکال هاست و نمایش روی وب
+
   static String apiurl = '${baseapimusicAndbaseapi}Singers';
 
   static String apilasttenmusic =
@@ -26,7 +29,7 @@ class UrlConst {
   static String apiuserinfoedit =
       "${baseapimusicAndbaseapi}InformationUsers/update-info";
 
-  // static const bapi = 'http://192.168.0.105:5133/api/';
+  static String apisearch = "${baseapimusicAndbaseapi}SearchControllers?query=";
 
   static const dlhost = 'https://www.dlfile.qassabi.ir';
 }

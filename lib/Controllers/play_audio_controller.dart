@@ -153,20 +153,6 @@ class PlayAudioController extends GetxController {
     debugPrint("Error: Duration is still null after $maxRetries attempts!");
   }
 
-  // Future<void> playAnotherMusic(int singerId, int musicId) async {
-  //   // لیست رو از سرور بگیر و playList رو پر کن
-  //   await playAudio(singerId, musicId);
-  //   // حالا پلیر رو روی پلی لیست جدید ست کن
-  //   await player.setAudioSource(playList,
-  //       initialIndex: 0, initialPosition: Duration.zero);
-  //   // بعدش ایندکس رو بگذار رو 0 (یا هر ایندکس دلخواه)
-  //   currentmusic.value = 0;
-  //   // پروگرس بار رو فعال کن
-  //   startProgress();
-  //   // اگر می‌خوای آهنگ اتوماتیک پخش شه:
-  //   // await player.play();
-  //   // isplaying.value = true;
-  // }
   Future<void> playAnotherMusic(int singerId, int musicId) async {
     Future.delayed(Duration(seconds: 3));
     loading.value = true;
@@ -203,10 +189,6 @@ class PlayAudioController extends GetxController {
           initialIndex: 0, initialPosition: Duration.zero);
 
       currentmusic.value = 0;
-
-      // حتماً اجرا شود
-      // await player.play();
-      isplaying.value = true;
       startProgress();
     }
 

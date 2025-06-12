@@ -20,6 +20,7 @@ class SingersController extends GetxController {
   final token = GetStorage().read('token');
   showsingerslist() async {
     try {
+      singerlist.clear();
       isloading.value = true;
       var response =
           await DioServices().getMethod(UrlConst.apiurl, token: token);

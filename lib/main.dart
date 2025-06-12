@@ -8,6 +8,7 @@ import 'package:music_player_app/Views/all_music_list_views.dart';
 import 'package:music_player_app/Views/home_screen_views.dart';
 import 'package:music_player_app/Views/musics_list_by_singer_id.dart';
 import 'package:music_player_app/Views/play_now_music.dart';
+import 'package:music_player_app/Views/search_views.dart';
 import 'package:music_player_app/Views/singers_list_views.dart';
 import 'package:music_player_app/Views/sms_verified_code_send_view.dart';
 import 'package:music_player_app/Views/sms_verify_code_view.dart';
@@ -47,8 +48,9 @@ class MyApp extends StatelessWidget {
         GetPage(
             name: AppRoutes.userProfileInfo, page: () => UserProfileViewPage()),
         GetPage(name: AppRoutes.spalsh, page: () => SplashScreen()),
+        GetPage(name: AppRoutes.searchPage, page: () => SearchViewsPage()),
       ],
-      initialRoute: AppRoutes.spalsh,
+      // initialRoute: AppRoutes.spalsh,
     );
   }
 }
@@ -64,4 +66,5 @@ class AppRoutes {
   static const smsVerified = '/SMSVerified';
   static const singersListPage = '/SingersListPage';
   static const userProfileInfo = '/UserProfileInfo';
+  static const searchPage = '/SearchPage';
 }

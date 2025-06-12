@@ -8,7 +8,9 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:music_player_app/Constant/functions.dart';
 import 'package:music_player_app/Constant/helper_size.dart';
+import 'package:music_player_app/Controllers/my_search_controllers.dart';
 import 'package:music_player_app/Controllers/user_info_controller.dart';
+import 'package:music_player_app/Widgets/Widgets_View/musics_list.dart';
 
 import 'package:music_player_app/Widgets/Widgets_View/singers_list.dart';
 import 'package:music_player_app/Widgets/back_bottom_navbar.dart';
@@ -28,7 +30,7 @@ class HomePage extends StatelessWidget {
   final UserInfoController userInfoController = Get.put(UserInfoController());
   @override
   Widget build(BuildContext context) {
-    // var size = MediaQuery.of(context).size;
+    final controller = Get.put(MySearchControllers());
     var responsive = ResponsiveHelper(context);
     String? token = box.read('token');
     if (token != null && token.isNotEmpty) {
@@ -41,6 +43,8 @@ class HomePage extends StatelessWidget {
       key: drawer,
       drawer: drawerApp(responsive.scaledBoxSize(20, 50), context),
       appBar: AppBar(
+          scrolledUnderElevation: 0,
+          elevation: 0,
           toolbarHeight: 60,
           automaticallyImplyLeading: false,
           title: Padding(
@@ -134,68 +138,121 @@ class HomePage extends StatelessWidget {
               ],
             ),
           )),
-      body: WillPopScope(
-        onWillPop: () async => false,
+      body: SafeArea(
         child: Stack(children: [
-          Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 25, 20, 20),
-                child: Container(
-                  padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  width: responsive.screenHeight / 1.2,
-                  // height: size.height / 4,
-                  decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 255, 255, 255),
-                      borderRadius: BorderRadius.circular(10)),
-                  child: TextField(
-                    controller: _search,
-                    autocorrect: true,
-                    decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: "خواننده ، نوا ، آلبوم",
-                        hintStyle: Theme.of(context).textTheme.labelSmall),
-                    cursorColor: Colors.black,
-                    style: Theme.of(context).textTheme.labelSmall,
-                  ),
-                ),
-              ),
-              Center(
-                  child: myBottomAppBar(
-                      context,
-                      Text(
-                        "جستجو",
-                        style: TextStyle(
-                            color: Color(0xFF3C5782),
-                            fontFamily: "Peyda-M",
-                            fontWeight: FontWeight.w800,
-                            fontSize: responsive.screenHeight / 50),
-                      ))),
-
-              //خوانندگان برتر
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 30, 20, 5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                //کادر جستجو
+                Column(
                   children: [
-                    Text(
-                      "خوانندگان برتر",
-                      style: Theme.of(context).textTheme.titleSmall,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        Get.offAndToNamed(AppRoutes.singersListPage);
-                      },
-                      child: Text(
-                        "نمایش همه",
-                        style: Theme.of(context).textTheme.titleSmall,
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 25, 20, 20),
+                      child: Container(
+                        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                        width: responsive.screenHeight / 1.2,
+                        // height: size.height / 4,
+                        decoration: BoxDecoration(
+                            color: const Color.fromARGB(255, 255, 255, 255),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: TextField(
+                          controller: _search,
+                          autocorrect: true,
+                          decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: "خواننده ، نوا",
+                              hintStyle:
+                                  Theme.of(context).textTheme.labelSmall),
+                          cursorColor: Colors.black,
+                          style: Theme.of(context).textTheme.labelSmall,
+                        ),
                       ),
+                    ),
+                    GestureDetector(
+                      onTap: () async {
+                        if (_search.text.isNotEmpty) {
+                          await Get.offAndToNamed(AppRoutes.searchPage,
+                              arguments: {
+                                'query': _search.text.trim(),
+                              });
+                          Future.delayed(
+                              Duration.zero,
+                              () => controller
+                                  .searchMusic(_search.text.trim())); // ✅
+                        } else {
+                          Get.snackbar("خطا", "لطفا یک متن وارد کنید",
+                              snackPosition: SnackPosition.TOP,
+                              duration: Duration(milliseconds: 1000),
+                              backgroundColor: Colors.red.withOpacity(0.7),
+                              colorText: Colors.white);
+                        }
+                        // Get.offAndToNamed(AppRoutes.searchPage);
+                      },
+                      child: Center(
+                          child: myBottomAppBar(
+                              context,
+                              Text(
+                                "جستجو",
+                                style: TextStyle(
+                                    color: Color(0xFF3C5782),
+                                    fontFamily: "Peyda-M",
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: responsive.screenHeight / 50),
+                              ))),
                     ),
                   ],
                 ),
-              ),
-              SingersListHomePage(),
-            ],
+
+                //خوانندگان برتر
+                Padding(
+                  padding: responsive.scaledPaddingLTRB(20, 0, 20, 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "خوانندگان برتر",
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Get.offAndToNamed(AppRoutes.singersListPage);
+                        },
+                        child: Text(
+                          "نمایش همه",
+                          style: Theme.of(context).textTheme.titleSmall,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SingersListHomePage(),
+
+                //نواهای جدید
+                Padding(
+                  padding: responsive.scaledPaddingLTRB(20, 0, 20, 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "نواهای جدید",
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
+                      // InkWell(
+                      //   onTap: () {
+                      //     Get.offAndToNamed(AppRoutes.singersListPage);
+                      //   },
+                      //   child: Text(
+                      //     "نمایش همه",
+                      //     style: Theme.of(context).textTheme.titleSmall,
+                      //   ),
+                      // ),
+                    ],
+                  ),
+                ),
+                MusicsListHomePage(),
+              ],
+            ),
           ),
           BackbottomNavbar(
               size: responsive.scaledBoxSize(responsive.screenHeight, 700)),

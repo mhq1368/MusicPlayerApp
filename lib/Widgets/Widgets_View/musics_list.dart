@@ -4,28 +4,27 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:music_player_app/Constant/functions.dart';
 import 'package:music_player_app/Constant/helper_size.dart';
-import 'package:music_player_app/Controllers/singers_controller.dart';
+import 'package:music_player_app/Controllers/all_music_list_controller.dart';
 import 'package:music_player_app/Widgets/loading_spin_kit_pulse.dart';
 import 'package:music_player_app/Widgets/myloading.dart';
 import 'package:music_player_app/main.dart';
 
 // ignore: must_be_immutable
-class SingersListHomePage extends StatefulWidget {
-  late SingersController singersController;
-  SingersListHomePage({super.key}) {
-    singersController = Get.put(SingersController());
+class MusicsListHomePage extends StatefulWidget {
+  late AllMusicListController musiccontroller;
+  MusicsListHomePage({super.key}) {
+    musiccontroller = Get.put(AllMusicListController());
   }
 
   @override
-  State<SingersListHomePage> createState() => _SingersListHomePageState();
+  State<MusicsListHomePage> createState() => _MusicsListHomePageState();
 }
 
 final box = GetStorage();
 
-class _SingersListHomePageState extends State<SingersListHomePage> {
+class _MusicsListHomePageState extends State<MusicsListHomePage> {
   @override
   Widget build(BuildContext context) {
-    // var size = MediaQuery.of(context).size;
     final responsive = ResponsiveHelper(context);
     String? token = box.read('token');
     debugPrint("TokenHome: $token");
@@ -39,17 +38,17 @@ class _SingersListHomePageState extends State<SingersListHomePage> {
     checkJwtExpirationAndLogout(token);
 
     return SizedBox(
-      height: responsive.screenHeight / 3.5,
+      height: responsive.screenHeight / 2.1,
       width: double.infinity,
       child: Obx(() {
-        if (widget.singersController.isloading.value ||
-            widget.singersController.singerlist.isEmpty) {
+        if (widget.musiccontroller.isloading.value ||
+            widget.musiccontroller.lasttenmusiclist.isEmpty) {
           return mainLoadingPulse(
               responsive.screenHeight / 2); // return اضافه شد
         } else {
           return ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: widget.singersController.singerlist.length,
+            itemCount: widget.musiccontroller.lasttenmusiclist.length,
             itemBuilder: (context, index) {
               return Row(
                 children: [
@@ -59,9 +58,12 @@ class _SingersListHomePageState extends State<SingersListHomePage> {
                         padding: responsive.scaledPaddingLTRB(20, 10, 20, 10),
                         child: GestureDetector(
                           onTap: () {
-                            Get.offAndToNamed(AppRoutes.musicsListPageBySinger,
-                                arguments:
-                                    widget.singersController.singerlist[index]);
+                            Get.offAndToNamed(AppRoutes.playNow, arguments: {
+                              'music': widget
+                                  .musiccontroller.lasttenmusiclist[index],
+                              'singerid': widget.musiccontroller
+                                  .lasttenmusiclist[index].singerId,
+                            });
                           },
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(25),
@@ -70,8 +72,9 @@ class _SingersListHomePageState extends State<SingersListHomePage> {
                               height: responsive.screenHeight / 5.5,
                               fit: BoxFit.cover,
                               alignment: Alignment.center,
-                              imageUrl: widget.singersController
-                                  .singerlist[index].singerpicurl!,
+                              imageUrl: widget.musiccontroller
+                                  .lasttenmusiclist[index].musicCover!
+                                  .toString(),
                               placeholder: (context, url) => Center(
                                   child:
                                       mainLoading(responsive.screenHeight / 2)),
@@ -82,8 +85,16 @@ class _SingersListHomePageState extends State<SingersListHomePage> {
                         ),
                       ),
                       Text(
-                        widget.singersController.singerlist[index].singername!,
+                        widget.musiccontroller.lasttenmusiclist[index]
+                                    .musicName!.length >
+                                15
+                            ? "${widget.musiccontroller.lasttenmusiclist[index].musicName!.substring(0, 15)}..."
+                            : widget.musiccontroller.lasttenmusiclist[index]
+                                .musicName!,
                         style: Theme.of(context).textTheme.titleSmall,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: false,
                       ),
                     ],
                   ),

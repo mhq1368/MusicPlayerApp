@@ -1,12 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:music_player_app/Controllers/my_search_controllers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:music_player_app/Constant/functions.dart';
 import 'package:music_player_app/Constant/helper_size.dart';
 import 'package:music_player_app/Controllers/singers_controller.dart';
+import 'package:music_player_app/Models/musics_model.dart';
+import 'package:music_player_app/Models/search_model.dart';
+import 'package:music_player_app/Models/singer_model.dart';
 import 'package:music_player_app/Widgets/back_bottom_navbar.dart';
 import 'package:music_player_app/Widgets/bottom_navbar.dart';
 import 'package:music_player_app/Widgets/loading_spin_kit_pulse.dart';
@@ -14,20 +16,41 @@ import 'package:music_player_app/main.dart';
 
 import '../gen/assets.gen.dart';
 
-final box = GetStorage();
+class SearchViewsPage extends StatelessWidget {
+  late SingersModel sm;
+  late String query;
+  late MySearchControllers searchController;
+  late SingersController singersController;
+  late SearchModel searchModel;
+  late String type;
+  SearchViewsPage({super.key}) {
+    searchController = Get.put(MySearchControllers());
+    query = Get.arguments['query'];
+    searchController.searchMusic(query);
+  }
+// تبدیل SearchModel به SingersModel
+  SingersModel mapSearchToSinger(SearchModel model) {
+    return SingersModel(
+      singerid: model.singerId,
+      singername: model.name,
+      singerpicurl: model.picUrl,
+    );
+  }
 
-class SingersListPage extends StatelessWidget {
-  SingersListPage({super.key});
+  MusicModel mapSearchToMusic(SearchModel model) {
+    return MusicModel(
+      musicId: model.musicId,
+      musicName: model.name,
+      musicCover: model.cover,
+      musicUrl: model.url,
+      musictime: '', // اگر مدت زمان در SearchModel نیست
+      singerId: 0, // اگر مشخص نیست، صفر بذار یا مقدار پیش‌فرض
+    );
+  }
 
-  final SingersController singersController = Get.put(SingersController());
   @override
   Widget build(BuildContext context) {
     final responsive = ResponsiveHelper(context);
-    String? token = box.read('token');
-    if (token != null && token.isNotEmpty) {
-      // بررسی انقضای توکن JWT و خروج در صورت انقضا
-      checkJwtExpirationAndLogout(token);
-    }
     return Scaffold(
       appBar: AppBar(
           scrolledUnderElevation:
@@ -37,25 +60,32 @@ class SingersListPage extends StatelessWidget {
           automaticallyImplyLeading: false,
           title: Padding(
             padding: responsive.scaledPaddingLTRB(5, 20, 5, 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "لیست خوانندگان",
-                  style: Theme.of(context).appBarTheme.titleTextStyle,
-                ),
-                InkWell(
-                    onTap: () {
-                      Get.offAllNamed(
-                          AppRoutes.homePage); // به صفحه اصلی برمی‌گردد
-                    },
-                    child: SvgPicture.asset(
-                      Assets.icons.arrowSmallLeft,
-                      // ignore: deprecated_member_use
-                      color: Colors.white,
-                      height: responsive.screenHeight / 25,
-                    )),
-              ],
+            child: Obx(
+              () => Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  searchController.type.value == "Music"
+                      ? Text(
+                          "لیست آهنگ ها",
+                          style: Theme.of(context).appBarTheme.titleTextStyle,
+                        )
+                      : Text(
+                          "لیست خوانندگان",
+                          style: Theme.of(context).appBarTheme.titleTextStyle,
+                        ),
+                  InkWell(
+                      onTap: () {
+                        Get.offAllNamed(
+                            AppRoutes.homePage); // به صفحه اصلی برمی‌گردد
+                      },
+                      child: SvgPicture.asset(
+                        Assets.icons.arrowSmallLeft,
+                        // ignore: deprecated_member_use
+                        color: Colors.white,
+                        height: responsive.screenHeight / 25,
+                      )),
+                ],
+              ),
             ),
           )),
       body: SafeArea(
@@ -67,15 +97,24 @@ class SingersListPage extends StatelessWidget {
                 padding: responsive.scaledPaddingLTRB(
                     0, 10, 0, 70), // 👈 این خط مهمه
                 shrinkWrap: true,
-                itemCount: singersController.singerlist.length,
+                itemCount: searchController.musicListSearch.length,
                 itemBuilder: (context, index) {
-                  final singer = singersController.singerlist[index];
+                  final itmes = searchController.musicListSearch[index];
                   return Padding(
                     padding: responsive.scaledPaddingLTRB(5, 0, 5, 0),
                     child: GestureDetector(
                       onTap: () {
-                        Get.toNamed(AppRoutes.musicsListPageBySinger,
-                            arguments: singersController.singerlist[index]);
+                        final singer = mapSearchToSinger(itmes);
+                        final music = mapSearchToMusic(itmes);
+                        if (searchController.type.value == "Singer") {
+                          Get.toNamed(AppRoutes.musicsListPageBySinger,
+                              arguments: singer);
+                        } else {
+                          Get.toNamed(AppRoutes.playNow, arguments: {
+                            'music': music,
+                            'singerid': singer.singerid,
+                          });
+                        }
                       },
                       child: Column(
                         children: [
@@ -98,7 +137,7 @@ class SingersListPage extends StatelessWidget {
                               ),
                               child: Padding(
                                 padding:
-                                    const EdgeInsets.fromLTRB(15, 20, 15, 20),
+                                    const EdgeInsets.fromLTRB(15, 10, 15, 10),
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -114,21 +153,17 @@ class SingersListPage extends StatelessWidget {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        Text("${singer.singername}"),
-                                        SizedBox(
-                                          height: responsive.screenHeight / 100,
-                                        ),
-                                        Text(
-                                            "تعداد نواها : ${singer.musiccount ?? 0}"),
+                                        Text("${itmes.name}"),
                                       ],
                                     ),
                                     Expanded(child: SizedBox()),
                                     ClipRRect(
-                                      borderRadius: BorderRadius.circular(1000),
+                                      borderRadius: BorderRadius.circular(50),
                                       child: CachedNetworkImage(
-                                        imageUrl: singer.singerpicurl!,
-                                        height: responsive.screenHeight / 8,
-                                        width: responsive.screenHeight / 8,
+                                        imageUrl:
+                                            itmes.picUrl ?? itmes.cover ?? "",
+                                        height: responsive.screenHeight / 13,
+                                        width: responsive.screenHeight / 13,
                                         fit: BoxFit.cover,
                                         alignment: Alignment.center,
                                         placeholder: (context, url) => Center(
