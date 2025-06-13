@@ -38,61 +38,69 @@ class _SingersListHomePageState extends State<SingersListHomePage> {
     }
     checkJwtExpirationAndLogout(token);
 
-    return SizedBox(
-      height: responsive.screenHeight / 3.5,
-      width: double.infinity,
-      child: Obx(() {
-        if (widget.singersController.isloading.value ||
-            widget.singersController.singerlist.isEmpty) {
-          return mainLoadingPulse(
-              responsive.screenHeight / 2); // return اضافه شد
-        } else {
-          return ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: widget.singersController.singerlist.length,
-            itemBuilder: (context, index) {
-              return Row(
-                children: [
-                  Column(
-                    children: [
-                      Padding(
-                        padding: responsive.scaledPaddingLTRB(20, 10, 20, 10),
-                        child: GestureDetector(
-                          onTap: () {
-                            Get.offAndToNamed(AppRoutes.musicsListPageBySinger,
-                                arguments:
-                                    widget.singersController.singerlist[index]);
-                          },
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(25),
-                            child: CachedNetworkImage(
-                              width: responsive.screenWidth / 2.5,
-                              height: responsive.screenHeight / 5.5,
-                              fit: BoxFit.cover,
-                              alignment: Alignment.center,
-                              imageUrl: widget.singersController
-                                  .singerlist[index].singerpicurl!,
-                              placeholder: (context, url) => Center(
-                                  child:
-                                      mainLoading(responsive.screenHeight / 2)),
-                              errorWidget: (context, url, error) =>
-                                  Icon(Icons.error),
+    return RefreshIndicator(
+      onRefresh: () async {
+        // ریفرش کردن لیست خوانندگان
+        await widget.singersController.showsingerslist();
+      },
+      child: SizedBox(
+        height: responsive.screenHeight / 3.5,
+        width: double.infinity,
+        child: Obx(() {
+          if (widget.singersController.isloading.value ||
+              widget.singersController.singerlist.isEmpty) {
+            return mainLoadingPulse(
+                responsive.screenHeight / 2); // return اضافه شد
+          } else {
+            return ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: widget.singersController.singerlist.length,
+              itemBuilder: (context, index) {
+                return Row(
+                  children: [
+                    Column(
+                      children: [
+                        Padding(
+                          padding: responsive.scaledPaddingLTRB(20, 10, 20, 10),
+                          child: GestureDetector(
+                            onTap: () {
+                              Get.offAndToNamed(
+                                  AppRoutes.musicsListPageBySinger,
+                                  arguments: widget
+                                      .singersController.singerlist[index]);
+                            },
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(25),
+                              child: CachedNetworkImage(
+                                width: responsive.screenWidth / 2.5,
+                                height: responsive.screenHeight / 5.5,
+                                fit: BoxFit.cover,
+                                alignment: Alignment.center,
+                                imageUrl: widget.singersController
+                                    .singerlist[index].singerpicurl!,
+                                placeholder: (context, url) => Center(
+                                    child: mainLoading(
+                                        responsive.screenHeight / 2)),
+                                errorWidget: (context, url, error) =>
+                                    Icon(Icons.error),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      Text(
-                        widget.singersController.singerlist[index].singername!,
-                        style: Theme.of(context).textTheme.titleSmall,
-                      ),
-                    ],
-                  ),
-                ],
-              );
-            },
-          );
-        }
-      }),
+                        Text(
+                          widget
+                              .singersController.singerlist[index].singername!,
+                          style: Theme.of(context).textTheme.titleSmall,
+                        ),
+                      ],
+                    ),
+                  ],
+                );
+              },
+            );
+          }
+        }),
+      ),
     );
   }
 }

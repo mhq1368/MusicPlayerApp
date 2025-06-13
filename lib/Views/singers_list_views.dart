@@ -58,112 +58,119 @@ class SingersListPage extends StatelessWidget {
               ],
             ),
           )),
-      body: SafeArea(
-        child: Stack(children: [
-          Padding(
-            padding: responsive.scaledPaddingLTRB(15, 0, 15, 30),
-            child: Obx(() {
-              if (singersController.singerlist.isEmpty) {
-                return Center(
-                  child: mainLoadingPulse(responsive.screenHeight / 2),
-                );
-              }
-              return ListView.builder(
-                padding: responsive.scaledPaddingLTRB(
-                    0, 10, 0, 70), // 👈 این خط مهمه
-                shrinkWrap: true,
-                itemCount: singersController.singerlist.length,
-                itemBuilder: (context, index) {
-                  final singer = singersController.singerlist[index];
-                  return Padding(
-                    padding: responsive.scaledPaddingLTRB(5, 0, 5, 0),
-                    child: GestureDetector(
-                      onTap: () {
-                        Get.toNamed(AppRoutes.musicsListPageBySinger,
-                            arguments: singersController.singerlist[index]);
-                      },
-                      child: Column(
-                        children: [
-                          Container(
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF273A5D),
-                                borderRadius: BorderRadius.circular(16),
-                                border: Border.all(
-                                  color: Colors.white24,
-                                  width: 1.2,
-                                ),
-                                gradient: LinearGradient(
-                                    colors: [
-                                      Color.fromARGB(90, 105, 135, 183),
-                                      Color(0xaa40577D),
-                                      Color(0xff1A2B47),
-                                    ],
-                                    begin: Alignment.bottomLeft,
-                                    end: Alignment.topRight),
-                              ),
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(15, 20, 15, 20),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Icon(CupertinoIcons.music_note,
-                                        color: Colors.white, size: 22),
-                                    SizedBox(
-                                      width: responsive.screenHeight / 90,
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text("${singer.singername}"),
-                                        SizedBox(
-                                          height: responsive.screenHeight / 100,
-                                        ),
-                                        Text(
-                                            "تعداد نواها : ${singer.musiccount ?? 0}"),
-                                      ],
-                                    ),
-                                    Expanded(child: SizedBox()),
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(1000),
-                                      child: CachedNetworkImage(
-                                        imageUrl: singer.singerpicurl!,
-                                        height: responsive.screenHeight / 8,
-                                        width: responsive.screenHeight / 8,
-                                        fit: BoxFit.cover,
-                                        alignment: Alignment.center,
-                                        placeholder: (context, url) => Center(
-                                            child: mainLoadingPulse(
-                                                responsive.screenHeight / 2)),
-                                        errorWidget: (context, url, error) =>
-                                            Icon(Icons.error),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )),
-                          SizedBox(
-                            height: 20,
-                          )
-                        ],
-                      ),
-                    ),
+      body: RefreshIndicator(
+        onRefresh: () {
+          return singersController.showsingerslist();
+        },
+        child: SafeArea(
+          child: Stack(children: [
+            Padding(
+              padding: responsive.scaledPaddingLTRB(15, 0, 15, 30),
+              child: Obx(() {
+                if (singersController.singerlist.isEmpty) {
+                  return Center(
+                    child: mainLoadingPulse(responsive.screenHeight / 2),
                   );
-                },
-              );
-            }),
-          ),
-          BackbottomNavbar(
-              size: responsive.scaledBoxSize(responsive.screenHeight, 700)),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: BottomNavbar(size: responsive.scaledBoxSize(0, 20)),
-          ),
-        ]),
+                }
+                return ListView.builder(
+                  padding: responsive.scaledPaddingLTRB(
+                      0, 10, 0, 70), // 👈 این خط مهمه
+                  shrinkWrap: true,
+                  itemCount: singersController.singerlist.length,
+                  itemBuilder: (context, index) {
+                    final singer = singersController.singerlist[index];
+                    return Padding(
+                      padding: responsive.scaledPaddingLTRB(5, 0, 5, 0),
+                      child: GestureDetector(
+                        onTap: () {
+                          Get.toNamed(AppRoutes.musicsListPageBySinger,
+                              arguments: singersController.singerlist[index]);
+                        },
+                        child: Column(
+                          children: [
+                            Container(
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF273A5D),
+                                  borderRadius: BorderRadius.circular(16),
+                                  border: Border.all(
+                                    color: Colors.white24,
+                                    width: 1.2,
+                                  ),
+                                  gradient: LinearGradient(
+                                      colors: [
+                                        Color.fromARGB(90, 105, 135, 183),
+                                        Color(0xaa40577D),
+                                        Color(0xff1A2B47),
+                                      ],
+                                      begin: Alignment.bottomLeft,
+                                      end: Alignment.topRight),
+                                ),
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(15, 20, 15, 20),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Icon(CupertinoIcons.music_note,
+                                          color: Colors.white, size: 22),
+                                      SizedBox(
+                                        width: responsive.screenHeight / 90,
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text("${singer.singername}"),
+                                          SizedBox(
+                                            height:
+                                                responsive.screenHeight / 100,
+                                          ),
+                                          Text(
+                                              "تعداد نواها : ${singer.musiccount ?? 0}"),
+                                        ],
+                                      ),
+                                      Expanded(child: SizedBox()),
+                                      ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(1000),
+                                        child: CachedNetworkImage(
+                                          imageUrl: singer.singerpicurl!,
+                                          height: responsive.screenHeight / 8,
+                                          width: responsive.screenHeight / 8,
+                                          fit: BoxFit.cover,
+                                          alignment: Alignment.center,
+                                          placeholder: (context, url) => Center(
+                                              child: mainLoadingPulse(
+                                                  responsive.screenHeight / 2)),
+                                          errorWidget: (context, url, error) =>
+                                              Icon(Icons.error),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )),
+                            SizedBox(
+                              height: 20,
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                );
+              }),
+            ),
+            BackbottomNavbar(
+                size: responsive.scaledBoxSize(responsive.screenHeight, 700)),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: BottomNavbar(size: responsive.scaledBoxSize(0, 20)),
+            ),
+          ]),
+        ),
       ),
     );
   }

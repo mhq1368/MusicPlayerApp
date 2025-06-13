@@ -10,6 +10,7 @@ import 'package:music_player_app/Controllers/all_music_list_controller.dart';
 import 'package:music_player_app/Views/home_screen_views.dart';
 import 'package:music_player_app/Widgets/back_bottom_navbar.dart';
 import 'package:music_player_app/Widgets/bottom_navbar.dart';
+import 'package:music_player_app/Widgets/loading_spin_kit_pulse.dart';
 import 'package:music_player_app/main.dart';
 
 import '../gen/assets.gen.dart';
@@ -28,6 +29,7 @@ class AllMusicsListPage extends StatelessWidget {
       // بررسی انقضای توکن JWT و خروج در صورت انقضا
       checkJwtExpirationAndLogout(token);
     }
+
     return Scaffold(
       appBar: AppBar(
           scrolledUnderElevation: 0,
@@ -55,51 +57,79 @@ class AllMusicsListPage extends StatelessWidget {
               ],
             ),
           )),
-      body: SafeArea(
-        child: Stack(children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: responsive.screenHeight / 35,
-              ),
-              Center(
-                child: Stack(children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(25),
-                    child: Stack(children: [
-                      Image.asset(
-                        Assets.images.freepik42489730.path,
-                        fit: BoxFit.cover,
-                        alignment: Alignment.topRight,
-                        width: responsive.screenWidth / 1.3,
-                        height: responsive.screenHeight / 3.5,
-                      ),
-                      Container(
-                        width: responsive.screenWidth / 1.3,
-                        height: responsive.screenHeight / 3.5,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              Color(0x00ffffff),
-                              Color.fromARGB(61, 255, 255, 255),
-                              Color.fromARGB(129, 245, 245, 245)
-                            ], // لیست رنگ‌ها
-                            begin: Alignment.topCenter, // نقطه‌ی شروع گرادینت
-                            end: Alignment.bottomCenter, // نقطه‌ی پایان گرادینت
-                          ),
+      body: RefreshIndicator(
+        onRefresh: () {
+          Future.delayed(Duration(seconds: 5));
+          return musicsController.getAllMusicsList();
+        },
+        child: SafeArea(
+          child: Stack(children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: responsive.screenHeight / 35,
+                ),
+                Center(
+                  child: Stack(children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(25),
+                      child: Stack(children: [
+                        Image.asset(
+                          Assets.images.freepik42489730.path,
+                          fit: BoxFit.cover,
+                          alignment: Alignment.topRight,
+                          width: responsive.screenWidth / 1.3,
+                          height: responsive.screenHeight / 3.5,
                         ),
-                      )
-                    ]),
-                  ),
-                ]),
-              ),
-              SizedBox(
-                height: responsive.screenHeight / 2.2,
-                child: Padding(
-                  padding: responsive.scaledPaddingLTRB(0, 10, 0, 10),
-                  child: Obx(
-                    () => ListView.builder(
+                        Container(
+                          width: responsive.screenWidth / 1.3,
+                          height: responsive.screenHeight / 3.5,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                Color(0x00ffffff),
+                                Color.fromARGB(61, 255, 255, 255),
+                                Color.fromARGB(129, 245, 245, 245)
+                              ], // لیست رنگ‌ها
+                              begin: Alignment.topCenter, // نقطه‌ی شروع گرادینت
+                              end: Alignment
+                                  .bottomCenter, // نقطه‌ی پایان گرادینت
+                            ),
+                          ),
+                        )
+                      ]),
+                    ),
+                  ]),
+                ),
+                SizedBox(
+                  height: responsive.screenHeight / 2.6,
+                  child: Obx(() {
+                    if (musicsController.allmusiclist.isEmpty) {
+                      Future.delayed(Duration(seconds: 10));
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            mainLoadingPulse(responsive.screenHeight / 2),
+                            SizedBox(
+                              height: responsive.screenHeight / 30,
+                            ),
+                            Text(
+                              "در حال بارگذاری لیست نوا ها ...",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(
+                                    color: Colors.white70,
+                                    fontSize: responsive.scaledFontSize(15) + 2,
+                                  ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                    return ListView.builder(
                       scrollDirection: Axis.vertical,
                       shrinkWrap: true,
                       itemCount: musicsController.allmusiclist.length,
@@ -201,19 +231,19 @@ class AllMusicsListPage extends StatelessWidget {
                           ),
                         );
                       },
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
-          BackbottomNavbar(
-              size: responsive.scaledBoxSize(responsive.screenHeight, 700)),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: BottomNavbar(size: size),
-          ),
-        ]),
+                    );
+                  }),
+                )
+              ],
+            ),
+            BackbottomNavbar(
+                size: responsive.scaledBoxSize(responsive.screenHeight, 700)),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: BottomNavbar(size: size),
+            ),
+          ]),
+        ),
       ),
     );
   }
