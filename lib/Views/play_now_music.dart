@@ -84,251 +84,234 @@ class _PlayNowMusicState extends State<PlayNowMusic> {
           ),
         ),
       ),
-      body: WillPopScope(
-        onWillPop: () async {
-          if (Get.previousRoute.isNotEmpty) {
-            debugPrint('مسیر فعلی: ${Get.previousRoute}');
-            return true;
-          } else {
-            Get.snackbar(
-                'توجه', 'لطفاً از دکمه طراحی‌شده برای برگشت استفاده کنید.');
-            return false;
-          }
-        },
-        child: SafeArea(
-          child: Stack(
-            children: [
-              Column(
-                children: [
-                  // تصویر کاور
-                  Padding(
-                    padding: const EdgeInsets.only(top: 15),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(deviceBasedRadius(context)),
-                          topRight:
-                              Radius.circular(deviceBasedRadius(context))),
-                      child: Obx(() {
-                        final list = playAudioController.audiolist;
-                        final index = playAudioController.currentmusic.value;
-
-                        if (list.isEmpty) {
-                          return SizedBox(
-                            width: appScreen.size.width / 1.2,
-                            height: appScreen.size.height / 4,
-                            child: Center(
-                                child: mainLoading(appScreen.size.height)),
-                          );
-                        }
-                        // ایندکس امن با استفاده از مدولو
-                        final safeIdx = list.isEmpty ? 0 : index % list.length;
-                        return CachedNetworkImage(
-                          width: appScreen.size.width / 1.2,
-                          height: appScreen.size.height / 4,
-                          fit: BoxFit.cover,
-                          alignment: Alignment.topCenter,
-                          imageUrl: list[safeIdx].musicCover!,
-                          placeholder: (context, url) =>
-                              Center(child: mainLoading(appScreen.size.height)),
-                          errorWidget: (context, url, error) => Center(
-                              child: mainLoading(appScreen.size.height / 3)),
-                        );
-                      }),
-                    ),
-                  ),
-
-                  // باکس اطلاعات آهنگ
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(deviceBasedRadius(context)),
-                        bottomRight:
-                            Radius.circular(deviceBasedRadius(context)),
-                      ),
-                      child: Container(
-                        width: appScreen.size.width / 1.2,
-                        height: appScreen.size.height / 13,
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [Color(0xffF2E1C1), Color(0xffd2ba90)],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                          border: Border.all(color: Colors.white24),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black26,
-                              blurRadius: 10,
-                              offset: Offset(0, 4),
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          children: [
-                            const SizedBox(width: 20),
-                            SvgPicture.asset(
-                              Assets.icons.microphone,
-                              height: 24,
-                              color: Colors.black87,
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Obx(() {
-                                playAudioController.waitForDuration();
-                                final list = playAudioController.audiolist;
-                                final index =
-                                    playAudioController.currentmusic.value;
-                                final safeIdx =
-                                    list.isEmpty ? 0 : index % list.length;
-                                return Text(
-                                  list.isEmpty
-                                      ? "در حال بارگذاری..."
-                                      : list[safeIdx].musicName!,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleSmall!
-                                      .copyWith(color: Colors.black87),
-                                  overflow: TextOverflow.ellipsis,
-                                );
-                              }),
-                            ),
-                            const SizedBox(width: 20),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  // لیست آهنگ‌ها
-                  SizedBox(height: appScreen.size.height / 90),
-                  SizedBox(
-                    width: double.infinity,
-                    height:
-                        appScreen.size.height / 2 + appScreen.padding.bottom,
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Column(
+              children: [
+                // تصویر کاور
+                Padding(
+                  padding: const EdgeInsets.only(top: 15),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(deviceBasedRadius(context)),
+                        topRight: Radius.circular(deviceBasedRadius(context))),
                     child: Obx(() {
                       final list = playAudioController.audiolist;
-                      return list.isNotEmpty
-                          ? ListView.builder(
-                              padding: EdgeInsets.only(
-                                  bottom: appScreen.padding.bottom +
-                                      appScreen.size.height / 4.9),
-                              itemCount: list.length,
-                              itemBuilder: (context, index) {
-                                final iscurrent = index ==
-                                    playAudioController.currentmusic.value;
-                                return GestureDetector(
-                                  onTap: () async {
-                                    if (!playAudioController.isplaying.value) {
-                                      await playAudioController.player.stop();
-                                      playAudioController.isplaying.value =
-                                          false;
-                                    }
+                      final index = playAudioController.currentmusic.value;
 
-                                    await playAudioController.playAnotherMusic(
-                                        list[index].singerId!,
-                                        list[index].musicId!);
-                                    playAudioController.currentmusic.value = 0;
-                                    playAudioController.player
-                                        .seek(Duration.zero);
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        10, 10, 10, 0),
-                                    child: Container(
-                                      height: 60,
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xFF273A5D),
-                                        borderRadius: BorderRadius.circular(16),
-                                        border: Border.all(
-                                            color: Colors.white24, width: 1.2),
-                                        gradient: const LinearGradient(
-                                          colors: [
-                                            Color.fromARGB(35, 105, 135, 183),
-                                            Color(0xaa40577D),
-                                            Color.fromARGB(133, 26, 43, 71),
-                                          ],
-                                          begin: Alignment.bottomLeft,
-                                          end: Alignment.topRight,
-                                        ),
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          const SizedBox(width: 20),
-                                          const Icon(CupertinoIcons.music_note,
-                                              color: Colors.white, size: 22),
-                                          const SizedBox(width: 10),
-                                          Expanded(
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  list[index].musicName ?? "",
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyMedium
-                                                      ?.copyWith(
-                                                          color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
-                                                const SizedBox(height: 4),
-                                                Text(
-                                                  list[index].musictime ?? "",
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodySmall
-                                                      ?.copyWith(
-                                                          color:
-                                                              Colors.white70),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          IconButton(
-                                            onPressed: () {
-                                              Get.to(() => const PlayNowMusic(),
-                                                  arguments: {
-                                                    'music': list[index],
-                                                    'singerid':
-                                                        list[index].singerId,
-                                                  });
-                                            },
-                                            icon: const Icon(
-                                              CupertinoIcons.play_circle_fill,
-                                              size: 24,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            )
-                          : Center(
-                              child:
-                                  mainLoadingPulse(appScreen.size.height / 3));
+                      if (list.isEmpty) {
+                        return SizedBox(
+                          width: appScreen.size.width / 1.2,
+                          height: appScreen.size.height / 4,
+                          child:
+                              Center(child: mainLoading(appScreen.size.height)),
+                        );
+                      }
+                      // ایندکس امن با استفاده از مدولو
+                      final safeIdx = list.isEmpty ? 0 : index % list.length;
+                      return CachedNetworkImage(
+                        width: appScreen.size.width / 1.2,
+                        height: appScreen.size.height / 4,
+                        fit: BoxFit.cover,
+                        alignment: Alignment.topCenter,
+                        imageUrl: list[safeIdx].musicCover!,
+                        placeholder: (context, url) =>
+                            Center(child: mainLoading(appScreen.size.height)),
+                        errorWidget: (context, url, error) => Center(
+                            child: mainLoading(appScreen.size.height / 3)),
+                      );
                     }),
                   ),
-                ],
-              ),
-
-              // ✅ پلیر پایین
-              SafeArea(
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: player(context),
                 ),
+
+                // باکس اطلاعات آهنگ
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(deviceBasedRadius(context)),
+                      bottomRight: Radius.circular(deviceBasedRadius(context)),
+                    ),
+                    child: Container(
+                      width: appScreen.size.width / 1.2,
+                      height: appScreen.size.height / 13,
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [Color(0xffF2E1C1), Color(0xffd2ba90)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        border: Border.all(color: Colors.white24),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 10,
+                            offset: Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          const SizedBox(width: 20),
+                          SvgPicture.asset(
+                            Assets.icons.microphone,
+                            height: 24,
+                            color: Colors.black87,
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Obx(() {
+                              playAudioController.waitForDuration();
+                              final list = playAudioController.audiolist;
+                              final index =
+                                  playAudioController.currentmusic.value;
+                              final safeIdx =
+                                  list.isEmpty ? 0 : index % list.length;
+                              return Text(
+                                list.isEmpty
+                                    ? "در حال بارگذاری..."
+                                    : list[safeIdx].musicName!,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleSmall!
+                                    .copyWith(color: Colors.black87),
+                                overflow: TextOverflow.ellipsis,
+                              );
+                            }),
+                          ),
+                          const SizedBox(width: 20),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+
+                // لیست آهنگ‌ها
+                SizedBox(height: appScreen.size.height / 90),
+                SizedBox(
+                  width: double.infinity,
+                  height: appScreen.size.height / 2 + appScreen.padding.bottom,
+                  child: Obx(() {
+                    final list = playAudioController.audiolist;
+                    return list.isNotEmpty
+                        ? ListView.builder(
+                            padding: EdgeInsets.only(
+                                bottom: appScreen.padding.bottom +
+                                    appScreen.size.height / 4.9),
+                            itemCount: list.length,
+                            itemBuilder: (context, index) {
+                              final iscurrent = index ==
+                                  playAudioController.currentmusic.value;
+                              return GestureDetector(
+                                onTap: () async {
+                                  if (!playAudioController.isplaying.value) {
+                                    await playAudioController.player.stop();
+                                    playAudioController.isplaying.value = false;
+                                  }
+
+                                  await playAudioController.playAnotherMusic(
+                                      list[index].singerId!,
+                                      list[index].musicId!);
+                                  playAudioController.currentmusic.value = 0;
+                                  playAudioController.player
+                                      .seek(Duration.zero);
+                                  playAudioController.isplaying.value = true;
+                                  playAudioController.player.play();
+                                },
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                                  child: Container(
+                                    height: 60,
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFF273A5D),
+                                      borderRadius: BorderRadius.circular(16),
+                                      border: Border.all(
+                                          color: Colors.white24, width: 1.2),
+                                      gradient: const LinearGradient(
+                                        colors: [
+                                          Color.fromARGB(35, 105, 135, 183),
+                                          Color(0xaa40577D),
+                                          Color.fromARGB(133, 26, 43, 71),
+                                        ],
+                                        begin: Alignment.bottomLeft,
+                                        end: Alignment.topRight,
+                                      ),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        const SizedBox(width: 20),
+                                        const Icon(CupertinoIcons.music_note,
+                                            color: Colors.white, size: 22),
+                                        const SizedBox(width: 10),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                list[index].musicName ?? "",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyMedium
+                                                    ?.copyWith(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              const SizedBox(height: 4),
+                                              Text(
+                                                list[index].musictime ?? "",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodySmall
+                                                    ?.copyWith(
+                                                        color: Colors.white70),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        IconButton(
+                                          onPressed: () {
+                                            // Get.to(() => const PlayNowMusic(),
+                                            //     arguments: {
+                                            //       'music': list[index],
+                                            //       'singerid':
+                                            //           list[index].singerId,
+                                            //     });
+                                          },
+                                          icon: const Icon(
+                                            CupertinoIcons.play_circle_fill,
+                                            size: 24,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          )
+                        : Center(
+                            child: mainLoadingPulse(appScreen.size.height / 3));
+                  }),
+                ),
+              ],
+            ),
+
+            // ✅ پلیر پایین
+            SafeArea(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: player(context),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

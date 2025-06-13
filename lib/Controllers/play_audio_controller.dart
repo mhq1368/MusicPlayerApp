@@ -13,7 +13,13 @@ class PlayAudioController extends GetxController {
   RxList<MusicModel> audiolist = RxList();
   RxBool isplaying = false.obs;
   RxBool loading = false.obs;
-  var player = AudioPlayer();
+  var player = AudioPlayer(
+      audioLoadConfiguration: AudioLoadConfiguration(
+    androidLoadControl: AndroidLoadControl(
+      minBufferDuration: Duration(seconds: 30), // کمترین بافر
+      maxBufferDuration: Duration(minutes: 5), // بیشترین بافر
+    ),
+  ));
   // ignore: prefer_typing_uninitialized_variables
   late var playList;
   // ignore: prefer_typing_uninitialized_variables
@@ -50,6 +56,7 @@ class PlayAudioController extends GetxController {
       });
 
       await playAudio(singerid, musicid);
+
       await player.setAudioSource(playList,
           initialIndex: 0, initialPosition: Duration.zero);
       player.durationStream.listen(
