@@ -5,6 +5,7 @@ import 'package:music_player_app/Constant/functions.dart';
 import 'package:music_player_app/Constant/helper_size.dart';
 import 'package:music_player_app/Controllers/sms_verify_controller.dart';
 import 'package:music_player_app/Views/sms_verified_code_send_view.dart';
+import 'package:music_player_app/Widgets/Widgets_View/info_box.dart';
 import 'package:music_player_app/gen/assets.gen.dart';
 
 class SmsVerifyPage extends StatelessWidget {
@@ -16,6 +17,7 @@ class SmsVerifyPage extends StatelessWidget {
     final responsive = ResponsiveHelper(context);
     // var size = MediaQuery.of(context).size;
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           automaticallyImplyLeading: false,
           title: Row(
@@ -29,14 +31,13 @@ class SmsVerifyPage extends StatelessWidget {
           ),
         ),
         body: Padding(
-          padding: const EdgeInsets.only(top: 25),
+          padding: responsive.scaledPaddingLTRB(0, 30, 0, 0),
           child: SizedBox(
             height: responsive.screenHeight,
             width: double.infinity,
             child: Column(
               children: [
                 // عکس کاربر
-
                 Image.asset(
                   Assets.svg.userProfilePic1.path,
                   alignment: Alignment.center,
@@ -161,6 +162,8 @@ class SmsVerifyPage extends StatelessWidget {
                 SizedBox(
                   height: responsive.screenHeight / 25,
                 ),
+                // باکس اطلاع به کاربر
+                myInfoBox(responsive: responsive),
               ],
             ),
           ),

@@ -9,6 +9,7 @@
 # packages, and plugins designed to encourage good coding practices.
 analyzer:
   errors:
+    camel_case_types: ignore
     deprecated_member_use: ignore
     must_be_immutable: ignore
     unused_local_variable: ignore
