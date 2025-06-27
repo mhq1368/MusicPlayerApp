@@ -3,9 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:music_player_app/Constant/functions.dart';
 import 'package:music_player_app/Constant/helper_size.dart';
+import 'package:music_player_app/Constant/strings_const.dart';
 import 'package:music_player_app/Controllers/sms_verify_controller.dart';
 import 'package:music_player_app/Views/sms_verified_code_send_view.dart';
 import 'package:music_player_app/Widgets/Widgets_View/info_box.dart';
+import 'package:music_player_app/Widgets/Widgets_View/privacy_widget.dart';
 import 'package:music_player_app/gen/assets.gen.dart';
 
 class SmsVerifyPage extends StatelessWidget {
@@ -161,6 +163,42 @@ class SmsVerifyPage extends StatelessWidget {
                         }))),
                 SizedBox(
                   height: responsive.screenHeight / 25,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      StringsConst.txtcondition1,
+                      style: TextStyle(
+                          color: Color.fromARGB(255, 255, 255, 255),
+                          fontFamily: 'Peyda-M',
+                          fontSize: responsive.screenHeight / 75,
+                          fontWeight: FontWeight.w700),
+                    ),
+                    InkWell(
+                        onTap: () {
+                          Get.showSnackbar(GetSnackBar(
+                            messageText: PrivacyUsers(responsive: responsive),
+                            title: StringsConst.txtcondition3,
+                          ));
+                        },
+                        child: Text(
+                          StringsConst.txtcondition,
+                          style: TextStyle(
+                              color: Color.fromARGB(255, 162, 213, 247),
+                              fontFamily: 'Peyda-M',
+                              fontSize: responsive.screenHeight / 55,
+                              fontWeight: FontWeight.w700),
+                        )),
+                    Text(
+                      StringsConst.txtcondition2,
+                      style: TextStyle(
+                          color: Color.fromARGB(255, 255, 255, 255),
+                          fontFamily: 'Peyda-M',
+                          fontSize: responsive.screenHeight / 75,
+                          fontWeight: FontWeight.w700),
+                    )
+                  ],
                 ),
                 // باکس اطلاع به کاربر
                 myInfoBox(responsive: responsive),

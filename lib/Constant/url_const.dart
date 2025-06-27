@@ -1,7 +1,7 @@
 class UrlConst {
   // static String baseapi = "http://192.168.0.105:5133/api/";
   // static const String apiurl = 'http://10.0.2.2:5129/api/Podcast'; //لوکال هاست و نمایش روی وب
-  static String baseapi = "https://musicplayer.kala210.ir/";
+  static String baseapi = "https://musicplayer.apxify.ir/";
 
   // static String baseapi = "http://192.168.188.100:5133/";
   // static String baseapi = "http://192.168.144.201:5133/";
