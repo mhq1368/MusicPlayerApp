@@ -115,7 +115,7 @@ class SmsVerifiedCodeSendView extends StatelessWidget {
                           mobilePhone, int.parse(sendedCode.text));
                       if (smsVC.isSuccess.value == true) {
                         // اگر کد تایید صحیح بود، به صفحه اصلی بروید
-                        Get.offAndToNamed("/HomePage", arguments: {
+                        Get.offAllNamed("/HomePage", arguments: {
                           "mobile": mobilePhone,
                           "code": sendedCode.text,
                           "token": smsVC.token.value

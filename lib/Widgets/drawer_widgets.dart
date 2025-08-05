@@ -6,6 +6,7 @@ import 'package:music_player_app/Constant/functions.dart';
 import 'package:music_player_app/Constant/helper_size.dart';
 import 'package:music_player_app/Controllers/user_info_controller.dart';
 import 'package:music_player_app/main.dart';
+import 'package:share_plus/share_plus.dart';
 
 final box = GetStorage();
 final UserInfoController userInfoController = Get.put(UserInfoController());
@@ -70,8 +71,12 @@ Drawer drawerApp(BuildContext context) {
           leading: Icon(Icons.share, color: Colors.white),
           title: Text('معرفی به دوستان',
               style: Theme.of(context).textTheme.bodyLarge),
-          onTap: () {
-            // Navigate to settings
+          onTap: () async {
+            await Share.share(
+              'به اپلیکیشن موزیک پلیر ما بپیوندید! \n'
+              'برای دانلود به لینک زیر مراجعه کنید: \n'
+              'https://cafebazaar.ir/app/com.example.avadis_music_player_app \n',
+            );
           },
         ),
         Padding(
